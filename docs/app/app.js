@@ -119,37 +119,48 @@
     const featured = withImg.slice(0, 8);
     const totalSku = CATALOG.reduce((a, p) => a + p.cluster_size, 0);
 
-    $('#main').innerHTML = `
-      <!-- HERO -->
-      <section class="hero">
-        <div class="container">
-          <div class="hero__grid">
-            <div>
-              <h1>Tecnologia e cuidado para cada passo da <em>sua jornada.</em></h1>
-              <p class="lead">Próteses, órteses e produtos de mobilidade com qualidade, conforto e confiança. ${CATALOG.length} produtos curados das principais marcas — Össur, Ottobock, WillowWood, ALPS e mais.</p>
-              <div class="hero__cta">
-                <a href="#cat/proteses" class="btn btn--primary btn--lg">Ver produtos</a>
-                <a href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener" class="btn btn--secondary btn--lg">Falar com especialista</a>
-              </div>
-              <div class="hero__trust">
-                <div class="hero__trust-item">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/></svg>
-                  Compra 100% segura
-                </div>
-                <div class="hero__trust-item">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>
-                  Parcele em até 12x
-                </div>
-                <div class="hero__trust-item">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h12v9H3z"/><path d="M15 10h4l2 3v3h-6"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
-                  Entrega para todo o Brasil
-                </div>
-              </div>
-            </div>
+    const slides = [
+      { img: 'assets/banner-proteses-orteses.jpg', alt: 'Próteses e Órteses — Tecnologia e conforto para cada etapa', href: '#cat/proteses', label: 'Explorar categoria' },
+      { img: 'assets/banner-mobilidade.jpg',       alt: 'Mobilidade, autonomia e possibilidades — sua loja online de próteses, órteses e mobilidade', href: '#brands', label: 'Conheça as categorias' },
+      { img: 'assets/banner-tecnologia.jpg',       alt: 'Tecnologia e cuidado para cada passo da sua jornada', href: '#cat/proteses', label: 'Ver produtos' },
+    ];
 
-            <div class="hero__visual">
-              <img src="assets/hero-photo.jpg" alt="Pessoa caminhando com prótese de fibra de carbono em ambiente externo, luz natural" width="860" height="591" loading="eager">
-            </div>
+    $('#main').innerHTML = `
+      <!-- HERO CARROSSEL -->
+      <section class="hero-carousel" aria-label="Banners de destaque" data-carousel>
+        <div class="hero-carousel__track" data-track>
+          ${slides.map((s, i) => `
+            <a class="hero-carousel__slide ${i === 0 ? 'is-active' : ''}" href="${s.href}" data-slide="${i}" aria-label="${esc(s.label)} — ${esc(s.alt)}">
+              <img src="${s.img}" alt="${esc(s.alt)}" loading="${i === 0 ? 'eager' : 'lazy'}" width="1672" height="941">
+            </a>
+          `).join('')}
+        </div>
+
+        <button class="hero-carousel__arrow hero-carousel__arrow--prev" data-prev aria-label="Slide anterior">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="hero-carousel__arrow hero-carousel__arrow--next" data-next aria-label="Próximo slide">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+
+        <div class="hero-carousel__dots" data-dots role="tablist" aria-label="Selecionar slide">
+          ${slides.map((_, i) => `<button class="hero-carousel__dot ${i === 0 ? 'is-active' : ''}" data-goto="${i}" aria-label="Ir para slide ${i + 1}" role="tab"></button>`).join('')}
+        </div>
+      </section>
+
+      <!-- CTA SECUNDÁRIO -->
+      <section class="hero-cta-bar">
+        <div class="container hero-cta-bar__inner">
+          <div class="hero-cta-bar__text">
+            <strong>Não sabe por onde começar?</strong>
+            <span>Fale com nossa equipe técnica — atendimento humano de quem entende.</span>
+          </div>
+          <div class="hero-cta-bar__actions">
+            <a href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Olá, gostaria de falar com um especialista da minhaprotese.com.br.')}" target="_blank" rel="noopener" class="btn btn--whatsapp btn--lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-4.94A8 8 0 1 1 8 19.55L3 21z"/></svg>
+              Falar com especialista
+            </a>
+            <a href="#cat/proteses" class="btn btn--secondary btn--lg">Ver catálogo</a>
           </div>
         </div>
       </section>
@@ -317,7 +328,73 @@
         </div>
       </section>
     `;
+    initCarousel();
     window.scrollTo(0, 0);
+  }
+
+  // ============================================================
+  //  CARROSSEL — auto-play + dots + setas + swipe
+  // ============================================================
+  function initCarousel() {
+    const carousel = $('[data-carousel]');
+    if (!carousel) return;
+    const slides = $$('.hero-carousel__slide');
+    const dots = $$('.hero-carousel__dot');
+    const total = slides.length;
+    let current = 0;
+    let timer = null;
+    const INTERVAL = 6000;
+
+    function go(idx) {
+      current = (idx + total) % total;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === current));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+    }
+    function next() { go(current + 1); }
+    function prev() { go(current - 1); }
+
+    function play() {
+      stop();
+      timer = setInterval(next, INTERVAL);
+    }
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    $('[data-prev]')?.addEventListener('click', e => { e.preventDefault(); prev(); play(); });
+    $('[data-next]')?.addEventListener('click', e => { e.preventDefault(); next(); play(); });
+    dots.forEach(d => d.addEventListener('click', e => {
+      e.preventDefault();
+      go(parseInt(d.dataset.goto));
+      play();
+    }));
+
+    // Pause on hover (desktop)
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', play);
+
+    // Swipe (mobile)
+    let startX = 0, startY = 0;
+    carousel.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      stop();
+    }, { passive: true });
+    carousel.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) next(); else prev();
+      }
+      play();
+    }, { passive: true });
+
+    // Pausa quando aba não está visível
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop(); else play();
+    });
+
+    play();
   }
 
   // ============================================================
