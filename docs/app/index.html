@@ -2,19 +2,23 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>minha prótese — catálogo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#14B4B4">
+  <title>minha prótese — componentes para prótese e órtese</title>
+  <meta name="description" content="E-commerce especializado em componentes para prótese e órtese. Catálogo curado das principais marcas — Össur, Ottobock, Blumentec, ALPS — com atendimento técnico e entrega rápida.">
   <link rel="icon" href="../../brand/logo/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Newsreader:ital,wght@1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="../../shopify-theme/assets/base.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Pular para o conteúdo</a>
+
   <header class="site-header">
     <div class="container site-header__inner">
-      <a href="#" class="site-header__logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" style="height:36px;">
+      <a href="#" class="site-header__logo" aria-label="minha prótese">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120">
           <g transform="translate(0,8)">
             <path d="M14 84 A 50 50 0 0 1 96 30" fill="none" stroke="#14B4B4" stroke-width="6" stroke-linecap="round"/>
             <line x1="58" y1="22" x2="92" y2="60" stroke="#1F262B" stroke-width="10" stroke-linecap="round"/>
@@ -29,16 +33,21 @@
           </g>
         </svg>
       </a>
-      <nav class="site-header__nav">
+
+      <nav class="site-header__nav" aria-label="Menu principal">
         <a href="#c/all">Catálogo</a>
-        <a href="#c/vendor-ossur">Össur</a>
-        <a href="#c/vendor-ottobock">Ottobock</a>
-        <a href="#c/vendor-blumentec">Blumentec</a>
-        <a href="#search">Buscar</a>
+        <a href="#c/type-liners">Liners</a>
+        <a href="#c/type-joelhos">Joelhos</a>
+        <a href="#c/type-pes-proteticos">Pés</a>
+        <a href="#c/vendor-ossur">Marcas</a>
       </nav>
+
       <div class="site-header__actions">
         <a href="#search" class="icon-btn" aria-label="Buscar">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </a>
+        <a href="#" class="icon-btn" aria-label="Minha conta">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
         </a>
         <a href="#cart" class="icon-btn" aria-label="Carrinho">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 14H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
@@ -48,113 +57,126 @@
     </div>
   </header>
 
-  <main id="app"></main>
+  <main id="main"></main>
 
   <footer class="site-footer">
     <div class="container">
       <div class="site-footer__grid">
         <div class="site-footer__col">
-          <p class="meta" style="max-width: 38ch;">
-            Componentes de prótese e órtese com curadoria técnica.
-            Atendimento via WhatsApp por equipe que entende do assunto.
-          </p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" style="height:32px;">
+            <g transform="translate(0,8)">
+              <path d="M14 84 A 50 50 0 0 1 96 30" fill="none" stroke="#46C4C4" stroke-width="6" stroke-linecap="round"/>
+              <line x1="58" y1="22" x2="92" y2="60" stroke="#FAF6F0" stroke-width="10" stroke-linecap="round"/>
+              <line x1="92" y1="60" x2="76" y2="100" stroke="#FAF6F0" stroke-width="10" stroke-linecap="round"/>
+              <circle cx="92" cy="60" r="9" fill="#1F262B" stroke="#46C4C4" stroke-width="4"/>
+              <circle cx="92" cy="60" r="2.5" fill="#F09020"/>
+            </g>
+            <g transform="translate(130,72)" font-family="Lexend, sans-serif" font-weight="600">
+              <text x="0" y="0" font-size="44" letter-spacing="-1.2" fill="#FAF6F0">minha</text>
+              <circle cx="148" cy="-12" r="4.5" fill="#F09020"/>
+              <text x="164" y="0" font-size="44" letter-spacing="-1.2" fill="#FAF6F0">prótese</text>
+            </g>
+          </svg>
+          <p class="meta" style="margin-top: 24px; max-width: 38ch; line-height: 1.65;">Componentes de prótese e órtese com curadoria técnica. Atendimento consultivo de quem entende do assunto.</p>
         </div>
         <div class="site-footer__col">
-          <h4>Marcas</h4>
+          <h4>Catálogo</h4>
           <ul>
-            <li><a href="#c/vendor-ossur">Össur</a></li>
-            <li><a href="#c/vendor-ottobock">Ottobock</a></li>
-            <li><a href="#c/vendor-blumentec">Blumentec</a></li>
-            <li><a href="#c/vendor-alps">ALPS</a></li>
-            <li><a href="#c/vendor-prokinetics">ProKinetics</a></li>
+            <li><a href="#c/all">Ver tudo</a></li>
+            <li><a href="#c/type-liners">Liners e meias</a></li>
+            <li><a href="#c/type-joelhos">Joelhos</a></li>
+            <li><a href="#c/type-pes-proteticos">Pés e tornozelos</a></li>
+            <li><a href="#c/type-adaptadores">Adaptadores</a></li>
           </ul>
         </div>
         <div class="site-footer__col">
           <h4>Atendimento</h4>
           <ul>
-            <li><a href="https://wa.me/5511000000000" target="_blank">WhatsApp</a></li>
-            <li><a href="mailto:contato@minhaprotese.com.br">contato@minhaprotese.com.br</a></li>
+            <li><a href="https://wa.me/5511000000000" target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a href="#">Como comprar</a></li>
+            <li><a href="#">Frete e prazos</a></li>
+            <li><a href="#">Trocas e devoluções</a></li>
           </ul>
         </div>
         <div class="site-footer__col">
-          <h4>Sobre</h4>
-          <p class="meta">CNPJ — preencher<br>São Paulo · SP</p>
+          <h4>Contato</h4>
+          <ul>
+            <li class="meta">contato@minhaprotese.com.br</li>
+            <li class="meta">+55 11 0000-0000</li>
+            <li class="meta" style="margin-top: 12px;">São Paulo · SP</li>
+          </ul>
         </div>
       </div>
       <div class="site-footer__bottom">
         <span>© 2026 minha prótese</span>
-        <span>Versão demonstrativa · checkout via WhatsApp</span>
+        <span><a href="#">Privacidade</a> · <a href="#">Termos</a> · <a href="#">Trocas</a></span>
       </div>
     </div>
   </footer>
 
-  <!-- Chat IA flutuante (demo com respostas canned) -->
-  <div id="mp-chat" class="mp-chat">
-    <button type="button" class="mp-chat__fab" onclick="document.getElementById('mp-chat').classList.toggle('is-open')">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-4.94A8 8 0 1 1 8 19.55L3 21z"/></svg>
+  <!-- Chat IA flutuante -->
+  <div id="mp-chat" class="mp-chat" aria-live="polite">
+    <button type="button" class="mp-chat__fab" data-mp-toggle aria-label="Abrir conversa">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-4.94A8 8 0 1 1 8 19.55L3 21z"/><path d="M8.5 9.5c.5 2 2 3.5 4 4"/></svg>
       <span class="mp-chat__fab-label">Tirar dúvida</span>
     </button>
-    <div class="mp-chat__panel">
+    <div class="mp-chat__panel" role="dialog" aria-label="Atendimento minha prótese">
       <header class="mp-chat__header">
         <div style="display:flex; align-items:center; gap:12px;">
-          <span class="mp-chat__avatar" style="background: var(--brand-teal-500); color:#fff; width:36px; height:36px; border-radius:50%; display:grid; place-items:center;">IA</span>
+          <span class="mp-chat__avatar">mp</span>
           <div>
             <strong style="display:block; font-size:14px; color:#fff;">Atendimento minha prótese</strong>
-            <span style="font-size:12px; color: rgba(255,255,255,0.7);">demo · IA real ao plugar endpoint</span>
+            <span style="font-size:12px; color: rgba(255,255,255,0.7);">Em média respondemos em 2 min</span>
           </div>
         </div>
-        <button class="mp-chat__close" onclick="document.getElementById('mp-chat').classList.remove('is-open')" style="background:transparent; border:0; color:#fff; padding:6px; cursor:pointer;">✕</button>
+        <button class="mp-chat__close" data-mp-toggle aria-label="Fechar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>
       </header>
       <div class="mp-chat__messages" id="chat-msgs">
         <div class="mp-chat__msg mp-chat__msg--in">
-          Oi! Aqui é a equipe da <em>minha prótese</em>. Pergunte sobre liners, joelhos, pés ou outro componente — te ajudo a achar no catálogo.
+          Oi! Aqui é a equipe da <em>minha prótese</em>. Conta pra gente o que você está procurando — pode falar do componente, do paciente ou da prescrição.
         </div>
       </div>
       <form class="mp-chat__form" id="chat-form">
-        <input class="mp-chat__input" type="text" name="message" placeholder="Escreva sua mensagem" required>
-        <button class="mp-chat__send btn btn--whatsapp btn--sm">Enviar</button>
+        <input class="mp-chat__input" type="text" name="message" placeholder="Pergunte sobre um produto" required autocomplete="off">
+        <button class="btn btn--whatsapp btn--sm">Enviar</button>
       </form>
       <div class="mp-chat__cta">
-        <a href="https://wa.me/5511000000000" target="_blank" class="btn btn--whatsapp btn--block">Falar no WhatsApp agora</a>
+        <a href="https://wa.me/5511000000000" target="_blank" rel="noopener" class="btn btn--whatsapp btn--block">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-4.94A8 8 0 1 1 8 19.55L3 21z"/></svg>
+          Falar no WhatsApp agora
+        </a>
       </div>
     </div>
   </div>
 
-  <style>
-    .mp-chat { position: fixed; right: 20px; bottom: 20px; z-index: 90; font-family: var(--font-sans); }
-    .mp-chat__fab { display: inline-flex; align-items: center; gap: 8px; height: 56px; padding: 0 20px 0 16px; background: var(--brand-orange-500); color: #fff; border: 0; border-radius: var(--r-pill); font-weight: 600; font-size: 14px; box-shadow: 0 12px 28px rgba(240,144,32,0.32); cursor: pointer; }
-    .mp-chat__panel { position: absolute; right: 0; bottom: 76px; width: 360px; max-width: calc(100vw - 40px); background: #fff; border-radius: 16px; box-shadow: 0 24px 56px rgba(0,0,0,0.32); overflow: hidden; display: none; flex-direction: column; max-height: 70vh; }
-    .mp-chat.is-open .mp-chat__panel { display: flex; }
-    .mp-chat__header { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; background: var(--warm-charcoal); color: #fff; }
-    .mp-chat__messages { flex: 1; padding: 18px; background: var(--warm-cream); display: flex; flex-direction: column; gap: 10px; min-height: 200px; max-height: 360px; overflow-y: auto; }
-    .mp-chat__msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.45; }
-    .mp-chat__msg em { font-family: var(--font-italic); font-style: italic; color: var(--brand-teal-600); font-weight: 500; }
-    .mp-chat__msg--in { background: #fff; align-self: flex-start; color: var(--brand-slate-700); border: 1px solid var(--brand-slate-200); }
-    .mp-chat__msg--out { background: var(--brand-teal-500); align-self: flex-end; color: #fff; }
-    .mp-chat__form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--brand-slate-200); }
-    .mp-chat__input { flex: 1; height: 40px; padding: 0 12px; border: 1px solid var(--brand-slate-200); border-radius: 10px; font: inherit; }
-    .mp-chat__cta { padding: 0 12px 12px; }
-  </style>
-
   <script src="app.js"></script>
   <script>
-    document.getElementById('chat-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const input = e.target.message;
-      const text = input.value.trim();
-      if (!text) return;
-      const msgs = document.getElementById('chat-msgs');
-      function addMsg(t, dir) {
-        const d = document.createElement('div');
-        d.className = 'mp-chat__msg mp-chat__msg--' + dir;
-        d.innerHTML = t.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-        msgs.appendChild(d);
-        msgs.scrollTop = msgs.scrollHeight;
-      }
-      addMsg(text, 'out');
-      input.value = '';
-      window.mpChatHandler(text, addMsg);
-    });
+    // Chat handler — toggle e dispatcher
+    (function () {
+      const chat = document.getElementById('mp-chat');
+      document.querySelectorAll('[data-mp-toggle]').forEach(b => b.addEventListener('click', () => {
+        chat.classList.toggle('is-open');
+      }));
+      document.getElementById('chat-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const input = e.target.message;
+        const text = input.value.trim();
+        if (!text) return;
+        const msgs = document.getElementById('chat-msgs');
+        function addMsg(t, dir) {
+          const d = document.createElement('div');
+          d.className = 'mp-chat__msg mp-chat__msg--' + dir;
+          d.innerHTML = t.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+          msgs.appendChild(d);
+          msgs.scrollTop = msgs.scrollHeight;
+        }
+        addMsg(text, 'out');
+        input.value = '';
+        window.mpChatHandler(text, addMsg);
+      });
+    })();
   </script>
 </body>
 </html>
