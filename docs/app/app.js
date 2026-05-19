@@ -1,6 +1,6 @@
-/* minha prótese — SPA v3 com produtos consolidados + variantes
- * Estrutura: cada item do catálogo é um produto-pai com 1+ variants.
- * Página de produto exibe seletor de variante quando cluster_size > 1.
+/* minhaprotese.com.br — SPA v3 com brand pack oficial
+ * Navy/Blue/Orange · Manrope/Inter · Categorias por tipo de produto
+ * Mantém: catálogo consolidado (parent + variants), carrinho via WhatsApp, chat IA
  */
 (function () {
   'use strict';
@@ -11,11 +11,7 @@
   const $ = sel => document.querySelector(sel);
   const $$ = sel => Array.from(document.querySelectorAll(sel));
   const money = v => v ? `R$ ${parseFloat(v).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}` : '';
-  const moneyRange = (min, max) => {
-    if (!min) return '';
-    if (min === max || !max) return money(min);
-    return `${money(min)} – ${money(max)}`;
-  };
+  const installment = v => v && parseFloat(v) > 100 ? `ou 12x de R$ ${(parseFloat(v) / 12).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}` : '';
   const slug = s => (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w-]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
   const esc = s => (s||'').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   const titlecaseSmart = s => {
@@ -29,6 +25,57 @@
     return s;
   };
 
+  // Mapeamento de categorias por keywords no título
+  const CATEGORIES = {
+    'proteses': {
+      title: 'Próteses',
+      subtitle: 'Desempenho e liberdade',
+      keywords: ['liner', 'pé ', 'pe ', 'joelho', 'encaixe', 'soquete', 'adaptador', 'pino', 'shuttle', 'taleo', 'triton', 'sach', 'pro-flex', 'proflex', 'iceross', 'alpha', 'aspire', 'meta core', 'meta arc', 'meta flow', 'tubo', 'pirâmide', 'piramide'],
+      icon: 'M12 2v6m0 8v6M2 12h6m8 0h6'
+    },
+    'orteses': {
+      title: 'Órteses',
+      subtitle: 'Suporte e estabilidade',
+      keywords: ['joelheira', 'tornozeleira', 'órtese', 'ortese', 'afo', 'xtern', 'palmilha', 'cinta', 'imobilizador', 'munhequeira', 'tornozelo madeira'],
+      icon: 'M9 3h6l-1 4h-4z M7 7h10l-2 14H9z'
+    },
+    'mobilidade': {
+      title: 'Mobilidade',
+      subtitle: 'Mais autonomia no dia a dia',
+      keywords: ['cadeira', 'scooter', 'andador', 'muleta', 'bengala', 'cadeirante'],
+      icon: 'M6 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M14 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M7 7h10l2 10h-14z'
+    },
+    'acessorios': {
+      title: 'Acessórios',
+      subtitle: 'Conforto e praticidade',
+      keywords: ['capa', 'meia', 'cobertura', 'cosmetic', 'cosmétic', 'creme', 'spray', 'fita', 'bandagem', 'gel para', 'óleo', 'oleo', 'limpa', 'higiene', 'reposição', 'reposicao'],
+      icon: 'M4 7h16v13H4z M9 4h6v3H9z'
+    },
+  };
+
+  function categorize(product) {
+    const hay = (product.title + ' ' + (product.variants?.[0]?.original_name || '')).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+    for (const [key, cat] of Object.entries(CATEGORIES)) {
+      if (cat.keywords.some(kw => hay.includes(kw.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')))) {
+        return key;
+      }
+    }
+    return 'proteses'; // default
+  }
+
+  const VENDOR_META = {
+    'Össur':        { origin: 'Islândia',  desc: 'Pés Pro-Flex, joelhos Aspire, liners Iceross.' },
+    'Ottobock':     { origin: 'Alemanha',  desc: 'Joelhos 3R80, C-Leg, pés SACH e Taleo.' },
+    'WillowWood':   { origin: 'EUA',       desc: 'Liners Alpha e pés META em fibra de carbono.' },
+    'ALPS':         { origin: 'EUA',       desc: 'Liners em gel e silicone para nível K2-K4.' },
+    'Polior':       { origin: 'Brasil',    desc: 'Componentes modulares e adaptadores.' },
+    'ProKinetics':  { origin: 'Brasil',    desc: 'Articulações, liners SUPREME e VACUUM.' },
+    'Ortho Pauher': { origin: 'Brasil',    desc: 'Meias para coto, órteses e acessórios.' },
+    'Ethnos':       { origin: 'Brasil',    desc: 'Sistema VIP de válvulas e kits RevoFit.' },
+    'Circleg':      { origin: 'Suíça',     desc: 'Joelho e pé dinâmico modulares.' },
+    'TuboMed':      { origin: 'Canadá',    desc: 'Órteses AFO externas XTERN.' },
+  };
+
   let CATALOG = [];
   let CART = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
 
@@ -37,6 +84,7 @@
     CATALOG = (await res.json()).map(p => ({
       ...p,
       title: titlecaseSmart(p.title),
+      category: categorize(p),
     }));
     updateCartBadge();
     window.addEventListener('hashchange', route);
@@ -47,8 +95,10 @@
     const h = (location.hash || '#').slice(1);
     const [section, param] = h.split('/').filter(Boolean);
     if (section === 'p') return renderProduct(param);
+    if (section === 'cat') return renderCategory(param);
     if (section === 'c') return renderCollection(param);
     if (section === 'cart') return renderCart();
+    if (section === 'brands') return renderBrandsHub();
     if (section === 'search') return renderSearch(new URLSearchParams(location.hash.split('?')[1] || '').get('q'));
     renderHome();
   }
@@ -65,119 +115,167 @@
   //  HOME
   // ============================================================
   function renderHome() {
-    const withImg = CATALOG.filter(p => p.status === 'active' && p.image);
-    const withImgWithPrice = withImg.filter(p => p.price_min);
-    const featured = withImgWithPrice.slice(0, 8);
+    const withImg = CATALOG.filter(p => p.image && p.price_min);
+    const featured = withImg.slice(0, 8);
     const totalSku = CATALOG.reduce((a, p) => a + p.cluster_size, 0);
 
     $('#main').innerHTML = `
+      <!-- HERO -->
       <section class="hero">
         <div class="container">
           <div class="hero__grid">
             <div>
-              <span class="eyebrow eyebrow--on-dark">Componentes para prótese e órtese</span>
-              <h1>Pra você caminhar <span class="em-italic em-italic--on-dark">no seu ritmo.</span></h1>
-              <p class="lead">${CATALOG.length} produtos das principais marcas — Össur, Ottobock, Blumentec, ALPS — com curadoria técnica e atendimento que entende.</p>
+              <h1>Tecnologia e cuidado para cada passo da <em>sua jornada.</em></h1>
+              <p class="lead">Próteses, órteses e produtos de mobilidade com qualidade, conforto e confiança. ${CATALOG.length} produtos curados das principais marcas — Össur, Ottobock, WillowWood, ALPS e mais.</p>
               <div class="hero__cta">
-                <a href="#c/all" class="btn btn--primary btn--lg">Ver catálogo</a>
-                <a href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener" class="btn btn--on-dark btn--lg">Falar no WhatsApp</a>
+                <a href="#cat/proteses" class="btn btn--primary btn--lg">Ver produtos</a>
+                <a href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener" class="btn btn--secondary btn--lg">Falar com especialista</a>
               </div>
-              <div class="hero__stats">
-                <div>
-                  <div class="hero__stat-number">${CATALOG.length.toLocaleString('pt-BR')}</div>
-                  <span class="hero__stat-label">Produtos</span>
+              <div class="hero__trust">
+                <div class="hero__trust-item">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/></svg>
+                  Compra 100% segura
                 </div>
-                <div>
-                  <div class="hero__stat-number hero__stat-number--accent">${totalSku.toLocaleString('pt-BR')}</div>
-                  <span class="hero__stat-label">SKUs com variantes</span>
+                <div class="hero__trust-item">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>
+                  Parcele em até 12x
                 </div>
-                <div>
-                  <div class="hero__stat-number">3 dias</div>
-                  <span class="hero__stat-label">Entrega média SP</span>
+                <div class="hero__trust-item">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h12v9H3z"/><path d="M15 10h4l2 3v3h-6"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+                  Entrega para todo o Brasil
                 </div>
               </div>
             </div>
 
-            <div class="hero__visual" aria-hidden="true">
-              <svg class="hero__visual-mark" viewBox="0 0 200 200">
-                <g transform="translate(20,20)">
-                  <path d="M20 130 A 70 70 0 0 1 140 50" fill="none" stroke="#7FD6D6" stroke-width="8" stroke-linecap="round"/>
-                  <line x1="80" y1="35" x2="130" y2="90" stroke="#FAF6F0" stroke-width="14" stroke-linecap="round"/>
-                  <line x1="130" y1="90" x2="105" y2="150" stroke="#FAF6F0" stroke-width="14" stroke-linecap="round"/>
-                  <circle cx="130" cy="90" r="13" fill="#1F262B" stroke="#7FD6D6" stroke-width="5"/>
-                  <circle cx="130" cy="90" r="4.5" fill="#F09020"/>
-                </g>
-              </svg>
-              <div class="hero__visual-tag">Distribuidores autorizados · 2026</div>
+            <div class="hero__visual">
+              <img src="assets/hero-banner-crop.png" alt="Pessoa em movimento com prótese, em luz natural" loading="eager">
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section section--cream">
-        <div class="container">
-          <div class="section-head">
-            <span class="eyebrow">Catálogo</span>
-            <h2>Encontre o que <span class="em-italic">você precisa.</span></h2>
-            <p class="lead">Organizamos por tipo de componente e marca — escolha por tamanho e modelo dentro de cada produto.</p>
-          </div>
-          <div class="categories">
-            ${vendorCards()}
-          </div>
-        </div>
-      </section>
-
+      <!-- CATEGORIAS -->
       <section class="section">
         <div class="container">
           <div class="section-head">
-            <span class="eyebrow">Em estoque agora</span>
-            <h2>Componentes que <span class="em-italic">saem mais.</span></h2>
-            <p class="lead">Curadoria dos produtos com maior demanda — preço médio das principais lojas do segmento.</p>
+            <span class="eyebrow">Categorias</span>
+            <h2>Encontre as soluções <em style="font-style:normal; color: var(--blue-700);">de mobilidade.</em></h2>
+            <p class="lead">Catálogo curado por tipo de produto, com variantes de tamanho, lado e modelo agrupadas em cada item.</p>
+          </div>
+
+          <div class="categories">
+            ${Object.entries(CATEGORIES).map(([key, cat]) => {
+              const count = CATALOG.filter(p => p.category === key).length;
+              if (count === 0) return '';
+              return `
+                <a href="#cat/${key}" class="category-card">
+                  <div>
+                    <h3 class="category-card__title">${cat.title}</h3>
+                    <span class="category-card__subtitle">${cat.subtitle}</span>
+                  </div>
+                  <span class="category-card__count">${count} produtos</span>
+                  <span class="category-card__arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </span>
+                </a>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </section>
+
+      <!-- PRODUTOS EM DESTAQUE -->
+      <section class="section section--soft">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Mais vendidos</span>
+            <h2>Em estoque, <em style="font-style:normal; color: var(--blue-700);">prontos para envio.</em></h2>
+            <p class="lead">Curadoria dos produtos com maior procura — preço médio das principais lojas do segmento.</p>
           </div>
           <div class="products">
             ${featured.map(productCard).join('')}
           </div>
-          <div class="text-center" style="margin-top: 56px;">
-            <a href="#c/all" class="btn btn--secondary btn--lg">Ver todos os ${CATALOG.length.toLocaleString('pt-BR')} produtos</a>
+          <div class="text-center" style="margin-top: 48px;">
+            <a href="#cat/proteses" class="btn btn--primary">Ver todos os ${CATALOG.length} produtos</a>
           </div>
         </div>
       </section>
 
-      <section class="section section--sand">
+      <!-- PILARES DE CONFIANÇA -->
+      <section class="section">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head" style="text-align: center; margin-inline: auto;">
             <span class="eyebrow">Por que comprar aqui</span>
-            <h2>Mais que um catálogo — <span class="em-italic">uma escolha bem feita.</span></h2>
-            <p class="lead">Atendimento técnico, curadoria das melhores marcas e logística confiável.</p>
+            <h2 style="margin-inline: auto;">Compra simples, <em style="font-style:normal; color: var(--blue-700);">com a segurança que você merece.</em></h2>
           </div>
           <div class="pillars">
             <div class="pillar">
-              <div class="pillar__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
-              <h3>Garantia de origem</h3>
-              <p>Distribuidores autorizados — Össur, Ottobock, WillowWood, Ortho Pauher, ALPS, Polior, ProKinetics, Ethnos, Circleg, TuboMed.</p>
+              <div class="pillar__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
+              <h3>Pagamento seguro</h3>
+              <p>Ambiente 100% protegido. Cartão, Pix ou boleto.</p>
             </div>
             <div class="pillar">
-              <div class="pillar__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-7a9 9 0 0 1 18 0v7"/><path d="M3 15h3v6H4a1 1 0 0 1-1-1v-5z"/><path d="M21 15h-3v6h2a1 1 0 0 0 1-1v-5z"/></svg></div>
-              <h3>Atendimento que entende</h3>
-              <p>Equipe técnica que conversa com você ou seu protesista pra escolher o componente certo.</p>
+              <div class="pillar__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg></div>
+              <h3>Parcele em 12x</h3>
+              <p>Condições facilitadas para o seu orçamento.</p>
             </div>
             <div class="pillar">
-              <div class="pillar__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h12v9H3z"/><path d="M15 10h4l2 3v3h-6"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></div>
+              <div class="pillar__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h12v9H3z"/><path d="M15 10h4l2 3v3h-6"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></div>
               <h3>Entrega rápida</h3>
-              <p>Pronta-entrega pros SKUs em estoque. Envio em 24h após confirmação, 3 dias pra SP capital.</p>
+              <p>Para todo o Brasil, em até 3 dias úteis em SP.</p>
+            </div>
+            <div class="pillar">
+              <div class="pillar__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-7a9 9 0 0 1 18 0v7"/><path d="M3 15h3v6H4a1 1 0 0 1-1-1v-5z"/><path d="M21 15h-3v6h2a1 1 0 0 0 1-1v-5z"/></svg></div>
+              <h3>Atendimento humano</h3>
+              <p>Equipe especializada pronta para ajudar você.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section section--charcoal">
+      <!-- MARCAS -->
+      <section class="section section--soft">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Marcas curadas</span>
+            <h2>Os fabricantes <em style="font-style:normal; color: var(--blue-700);">de confiança.</em></h2>
+            <p class="lead">Compra direta de distribuidores oficiais. Nota fiscal e garantia em todos os produtos.</p>
+          </div>
+          <div class="categories">
+            ${['Össur', 'Ottobock', 'WillowWood', 'ALPS', 'Polior', 'ProKinetics'].map(v => {
+              const count = CATALOG.filter(p => p.vendor === v).length;
+              if (count === 0) return '';
+              const meta = VENDOR_META[v] || {};
+              return `
+                <a href="#c/vendor-${slug(v)}" class="category-card">
+                  <div>
+                    <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);">${esc(meta.origin || '')}</span>
+                    <h3 class="category-card__title" style="margin-top: 6px;">${esc(v)}</h3>
+                    <span class="category-card__subtitle">${esc(meta.desc || '')}</span>
+                  </div>
+                  <span class="category-card__count">${count} produtos</span>
+                  <span class="category-card__arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </span>
+                </a>
+              `;
+            }).join('')}
+          </div>
+          <div class="text-center" style="margin-top: 32px;">
+            <a href="#brands" class="btn btn--secondary">Ver todas as marcas</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEPOIMENTO -->
+      <section class="section section--dark">
         <div class="container" style="max-width: 880px; text-align: center;">
           <span class="eyebrow eyebrow--on-dark">Quem compra aqui</span>
-          <h2 style="margin-top: 0;">
-            <span class="em-italic em-italic--on-dark" style="font-size: clamp(28px, 3.8vw, 38px); line-height: 1.3;">"Cheguei perdido, sem saber por onde começar. A equipe me explicou cada componente, escolheu o ideal para o meu pai e ainda acompanhou a entrega."</span>
+          <h2 style="margin-top: 0; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.3;">
+            "Cheguei perdido, sem saber por onde começar. A equipe me explicou cada componente, escolheu o ideal para o meu pai e ainda acompanhou a entrega."
           </h2>
-          <p style="margin-top: 40px; color: #CBD0D4; font-size: 14px;">
-            <strong style="color:#fff; font-weight:600;">Renato S.</strong> · Filho de paciente · São Paulo
+          <p style="margin-top: 32px; color: #CBD0DA; font-size: 14px;">
+            <strong style="color:#fff; font-weight:700;">Renato S.</strong> · Filho de paciente · São Paulo
           </p>
         </div>
       </section>
@@ -185,59 +283,96 @@
     window.scrollTo(0, 0);
   }
 
-  const VENDOR_META = {
-    'Össur':        { origin: 'Islândia',  tag: 'Premium',     desc: 'Pés Pro-Flex, joelhos Aspire, liners Iceross.' },
-    'Ottobock':     { origin: 'Alemanha',  tag: 'Tradicional', desc: 'Joelhos 3R80, C-Leg, pés SACH e Taleo.' },
-    'WillowWood':   { origin: 'EUA',       tag: 'Liners Alpha',desc: 'Liners Alpha e pés META em fibra de carbono.' },
-    'ALPS':         { origin: 'EUA',       tag: 'Liners',      desc: 'Liners em gel e silicone para nível K2-K4.' },
-    'Polior':       { origin: 'Brasil',    tag: 'Nacional',    desc: 'Componentes modulares e adaptadores.' },
-    'ProKinetics':  { origin: 'Brasil',    tag: 'Articulações',desc: 'Articulações de joelho, liners SUPREME e VACUUM.' },
-    'Ortho Pauher': { origin: 'Brasil',    tag: 'Acessórios',  desc: 'Meias para coto, órteses e acessórios.' },
-    'Ethnos':       { origin: 'Brasil',    tag: 'Sistemas',    desc: 'Sistema VIP de válvulas e kits RevoFit.' },
-    'Circleg':      { origin: 'Suíça',     tag: 'Modular',     desc: 'Joelho e pé dinâmico modulares e leves.' },
-    'TuboMed':      { origin: 'Canadá',    tag: 'Pé caído',    desc: 'Órteses AFO externas XTERN para pé caído.' },
-    'Paralid':      { origin: 'Internacional', tag: 'Dedos',   desc: 'Próteses funcionais de dedo e polegar.' },
-  };
+  // ============================================================
+  //  HUB DE MARCAS
+  // ============================================================
+  function renderBrandsHub() {
+    const vendors = Object.keys(VENDOR_META);
+    $('#main').innerHTML = `
+      <div class="container">
+        <nav class="breadcrumb">
+          <a href="#">Início</a>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="9 6 15 12 9 18"/></svg>
+          <span>Marcas</span>
+        </nav>
 
-  function vendorCards() {
-    const vendors = ['Össur', 'Ottobock', 'WillowWood', 'ALPS', 'Polior', 'ProKinetics', 'Ortho Pauher', 'Ethnos', 'Circleg', 'TuboMed'];
-    return vendors.map(v => {
-      const count = CATALOG.filter(p => p.vendor === v).reduce((a, p) => a + p.cluster_size, 0);
-      const products = CATALOG.filter(p => p.vendor === v).length;
-      if (products === 0) return '';
-      const meta = VENDOR_META[v] || {};
-      return `
-        <a href="#c/vendor-${slug(v)}" class="category-card">
-          ${meta.origin ? `<span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em; color: var(--slate-500); font-weight: 700; margin-bottom: 4px;">${esc(meta.origin)}</span>` : ''}
-          <h3 class="category-card__title">${v}</h3>
-          <span class="category-card__count">${products} produtos · ${count} SKUs</span>
-        </a>
-      `;
-    }).join('');
+        <header style="padding-bottom: 32px; margin-bottom: 40px;">
+          <span class="eyebrow">Catálogo por fabricante</span>
+          <h1 style="font-size: clamp(36px, 5vw, 52px); margin-top: 8px;">Todas as marcas</h1>
+          <p class="lead" style="margin-top: 12px;">Distribuímos só de fabricantes autorizados, com nota fiscal e garantia de origem.</p>
+        </header>
+
+        <div class="categories">
+          ${vendors.map(v => {
+            const count = CATALOG.filter(p => p.vendor === v).length;
+            if (count === 0) return '';
+            const meta = VENDOR_META[v];
+            return `
+              <a href="#c/vendor-${slug(v)}" class="category-card">
+                <div>
+                  <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);">${esc(meta.origin)}</span>
+                  <h3 class="category-card__title" style="margin-top: 6px;">${esc(v)}</h3>
+                  <span class="category-card__subtitle">${esc(meta.desc)}</span>
+                </div>
+                <span class="category-card__count">${count} produtos</span>
+                <span class="category-card__arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
+              </a>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+    window.scrollTo(0, 0);
   }
 
   // ============================================================
-  //  COLEÇÃO
+  //  CATEGORIA (Próteses/Órteses/Mobilidade/Acessórios/Ofertas)
   // ============================================================
+  function renderCategory(key) {
+    let products, title, subtitle;
+
+    if (key === 'ofertas') {
+      products = CATALOG.filter(p => p.image && p.price_min);
+      title = 'Ofertas';
+      subtitle = 'Produtos com pronta-entrega e preço de mercado.';
+    } else if (CATEGORIES[key]) {
+      products = CATALOG.filter(p => p.category === key);
+      title = CATEGORIES[key].title;
+      subtitle = CATEGORIES[key].subtitle;
+    } else {
+      return renderHome();
+    }
+
+    return renderProductGrid({
+      title, subtitle,
+      eyebrow: 'Categoria',
+      products,
+      breadcrumb: title,
+    });
+  }
+
   function renderCollection(param) {
     let products = CATALOG;
     let title = 'Todo o catálogo';
-    let eyebrow = 'Catálogo completo';
+    let eyebrow = 'Catálogo';
 
-    if (param && param !== 'all') {
-      if (param.startsWith('vendor-')) {
-        const v = decodeURIComponent(param.slice(7));
-        products = CATALOG.filter(p => slug(p.vendor) === v);
-        title = products[0]?.vendor || v;
-        eyebrow = 'Marca';
-      }
+    if (param && param.startsWith('vendor-')) {
+      const v = decodeURIComponent(param.slice(7));
+      products = CATALOG.filter(p => slug(p.vendor) === v);
+      title = products[0]?.vendor || v;
+      eyebrow = 'Marca';
     }
 
-    // Ordena: com imagem + ativo + preço primeiro
+    return renderProductGrid({ title, subtitle: '', eyebrow, products, breadcrumb: title });
+  }
+
+  function renderProductGrid({ title, subtitle, eyebrow, products, breadcrumb }) {
     products = [...products].sort((a, b) => {
-      const scoreA = (a.image ? 4 : 0) + (a.status === 'active' ? 2 : 0) + (a.price_min ? 1 : 0);
-      const scoreB = (b.image ? 4 : 0) + (b.status === 'active' ? 2 : 0) + (b.price_min ? 1 : 0);
-      if (scoreA !== scoreB) return scoreB - scoreA;
+      const sa = (a.image ? 4 : 0) + (a.status === 'active' ? 2 : 0) + (a.price_min ? 1 : 0);
+      const sb = (b.image ? 4 : 0) + (b.status === 'active' ? 2 : 0) + (b.price_min ? 1 : 0);
+      if (sa !== sb) return sb - sa;
       return a.title.localeCompare(b.title, 'pt-BR');
     });
 
@@ -248,20 +383,17 @@
         <nav class="breadcrumb">
           <a href="#">Início</a>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="9 6 15 12 9 18"/></svg>
-          <a href="#c/all">Catálogo</a>
-          ${param && param !== 'all' ? `
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="9 6 15 12 9 18"/></svg>
-            <span>${esc(title)}</span>
-          ` : ''}
+          <span>${esc(breadcrumb)}</span>
         </nav>
 
-        <header style="padding-bottom: 32px; border-bottom: 1px solid var(--slate-200); margin-bottom: 56px;">
-          <span class="eyebrow">${eyebrow}</span>
-          <h1 style="font-size: clamp(36px, 5vw, 56px); margin-top: 8px;">${esc(title)}</h1>
+        <header style="padding-bottom: 32px; border-bottom: 1px solid var(--border); margin-bottom: 40px;">
+          <span class="eyebrow">${esc(eyebrow)}</span>
+          <h1 style="font-size: clamp(36px, 5vw, 52px); margin-top: 8px;">${esc(title)}</h1>
+          ${subtitle ? `<p class="lead" style="margin-top: 8px;">${esc(subtitle)}</p>` : ''}
           <p class="meta" style="margin-top: 12px;">${products.length} produtos</p>
         </header>
 
-        <div class="collection-layout" style="padding-block: 0;">
+        <div class="collection-layout">
           <aside class="facets" aria-label="Filtros">
             ${vendors.length > 1 ? `
               <h4>Marca</h4>
@@ -269,9 +401,10 @@
                 ${vendors.slice(0, 12).map(v => `<li><a href="#c/vendor-${slug(v)}">${esc(v)} <span>${products.filter(p => p.vendor===v).length}</span></a></li>`).join('')}
               </ul>
             ` : ''}
-            <h4>Disponibilidade</h4>
+            <h4>Categorias</h4>
             <ul>
-              <li><a href="#c/all">Todos</a></li>
+              ${Object.entries(CATEGORIES).map(([k, c]) => `<li><a href="#cat/${k}">${c.title}</a></li>`).join('')}
+              <li><a href="#cat/ofertas" style="color: var(--orange-500); font-weight: 700;">Ofertas</a></li>
             </ul>
           </aside>
 
@@ -280,7 +413,7 @@
               ${products.slice(0, 60).map(productCard).join('')}
             </div>
             ${products.length > 60 ? `
-              <div class="text-center" style="margin-top: 48px;">
+              <div class="text-center" style="margin-top: 40px;">
                 <a href="#search?q=${encodeURIComponent(title)}" class="btn btn--secondary">Ver mais (${products.length - 60} restantes)</a>
               </div>
             ` : ''}
@@ -292,7 +425,7 @@
   }
 
   // ============================================================
-  //  PRODUTO com seletor de variantes
+  //  PRODUTO
   // ============================================================
   function renderProduct(handle) {
     const p = CATALOG.find(x => x.handle === handle);
@@ -325,18 +458,19 @@
             <span class="product-info__vendor">${esc(p.vendor)}</span>
             <h1 class="product-info__title">${esc(p.title)}</h1>
             ${hasVariants
-              ? `<span class="product-info__sku"><strong style="color: var(--ink); margin-right: 4px;">${p.cluster_size}</strong> opções disponíveis · Distribuidor autorizado</span>`
+              ? `<span class="product-info__sku"><strong style="color: var(--navy-900); margin-right: 4px;">${p.cluster_size}</strong> opções de ${p.variant_axis || 'modelo'} · Distribuidor autorizado</span>`
               : `<span class="product-info__sku">SKU ${esc(p.variants[0].sku)} · Distribuidor autorizado</span>`
             }
 
             ${p.price_min ? `
               <div class="product-info__price-wrap">
-                <span class="product-info__price" data-price>${hasVariants && p.price_min !== p.price_max ? moneyRange(p.price_min, p.price_max) : money(p.price_min)}</span>
+                <div class="product-info__price" data-price>${money(p.price_min)}${hasVariants && p.price_min !== p.price_max && p.price_max ? ` – ${money(p.price_max)}` : ''}</div>
+                ${parseFloat(p.price_min) > 100 ? `<div class="product-info__installment" data-installment>${installment(p.price_min)} sem juros</div>` : ''}
               </div>
             ` : `
-              <div style="margin: 32px 0 28px; padding: 20px; background: var(--cream); border-radius: 10px; border-left: 3px solid var(--teal-500);">
-                <strong style="color: var(--ink); display: block; margin-bottom: 4px;">Preço sob consulta</strong>
-                <span style="font-size: 14px; color: var(--slate-600);">Orçamento via WhatsApp em até 1 dia útil.</span>
+              <div style="margin: 28px 0 24px; padding: 20px; background: var(--bg-soft); border-radius: var(--radius-md); border-left: 3px solid var(--blue-700);">
+                <strong style="color: var(--navy-900); display: block; margin-bottom: 4px;">Preço sob consulta</strong>
+                <span style="font-size: 14px; color: var(--text-secondary);">Orçamento via WhatsApp em até 1 dia útil.</span>
               </div>
             `}
 
@@ -372,7 +506,7 @@
             </a>
 
             <div class="product-info__description">
-              <p>${esc(p.title)} — distribuído pela minha prótese com nota fiscal e garantia de origem da ${esc(p.vendor)}.${hasVariants ? ` Disponível em ${p.cluster_size} ${p.variant_axis ? p.variant_axis.toLowerCase() + 's' : 'variantes'}.` : ''}</p>
+              <p>${esc(p.title)} — distribuído pela minhaprotese.com.br com nota fiscal e garantia de origem da ${esc(p.vendor)}.${hasVariants ? ` Disponível em ${p.cluster_size} ${p.variant_axis ? p.variant_axis.toLowerCase() + 's' : 'variantes'}.` : ''}</p>
             </div>
 
             <div class="product-specs">
@@ -382,18 +516,18 @@
                 ${hasVariants ? `<dt>Variantes</dt><dd>${p.cluster_size} opções de ${p.variant_axis || 'modelo'}</dd>` : `<dt>SKU</dt><dd>${esc(p.variants[0].sku)}</dd>`}
                 <dt>Origem</dt><dd>Distribuidor autorizado</dd>
                 <dt>Embalagem</dt><dd>Unidade</dd>
-                <dt>Garantia</dt><dd>6 meses contra defeito</dd>
+                <dt>Garantia</dt><dd>6 meses contra defeito de fabricação</dd>
               </dl>
             </div>
           </div>
         </div>
 
         ${related.length ? `
-          <section class="section section--cream" style="margin: 56px calc(-1 * var(--page-x)) 0; padding-inline: var(--page-x); border-radius: 0;">
+          <section class="section section--soft" style="margin: 56px calc(-1 * var(--page-x)) 0; padding-inline: var(--page-x); border-radius: 0;">
             <div style="max-width: var(--max-w); margin: 0 auto;">
               <div class="section-head">
                 <span class="eyebrow">Da mesma marca</span>
-                <h2 style="font-size: clamp(28px, 3vw, 36px);">Mais de <span class="em-italic">${esc(p.vendor)}.</span></h2>
+                <h2 style="font-size: clamp(24px, 3vw, 32px);">Mais de ${esc(p.vendor)}</h2>
               </div>
               <div class="products">${related.map(productCard).join('')}</div>
             </div>
@@ -410,9 +544,7 @@
     return `
       <div class="variant-selector" data-variant-selector>
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px;">
-          <label class="label" style="margin: 0;">
-            <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--slate-500); font-weight: 700;">${esc(axis)}</span>
-          </label>
+          <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 800;">${esc(axis)}</span>
           <span class="meta" id="variant-info" style="font-size: 12px;">Escolha uma opção</span>
         </div>
         <div class="variant-pills" id="variant-pills">
@@ -424,35 +556,6 @@
           `).join('')}
         </div>
       </div>
-      <style>
-        .variant-selector { margin: 28px 0 0; }
-        .variant-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-        .variant-pill {
-          display: inline-flex;
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 2px;
-          padding: 10px 16px;
-          background: #fff;
-          border: 1px solid var(--slate-200);
-          border-radius: 8px;
-          font: inherit;
-          color: var(--slate-700);
-          cursor: pointer;
-          transition: border-color 150ms linear, background 150ms linear, color 150ms linear;
-          min-width: 80px;
-        }
-        .variant-pill:hover { border-color: var(--teal-400); color: var(--teal-700); }
-        .variant-pill.is-active {
-          border-color: var(--teal-500);
-          background: var(--teal-50);
-          color: var(--teal-700);
-          box-shadow: 0 0 0 3px rgba(20, 180, 180, 0.1);
-        }
-        .variant-pill__value { font-size: 14px; font-weight: 600; }
-        .variant-pill__sku { font-size: 11px; font-family: var(--font-mono); color: var(--slate-500); }
-        .variant-pill.is-active .variant-pill__sku { color: var(--teal-600); }
-      </style>
     `;
   }
 
@@ -464,13 +567,14 @@
       selectedVariantIdx = idx;
       const v = p.variants[idx];
       $$('.variant-pill').forEach((el, i) => el.classList.toggle('is-active', i === idx));
-      // Atualiza preço se o variant tiver preço próprio diferente
       if (v.price) {
         const priceEl = $('[data-price]');
+        const instEl = $('[data-installment]');
         if (priceEl) priceEl.textContent = money(v.price);
+        if (instEl && parseFloat(v.price) > 100) instEl.textContent = installment(v.price) + ' sem juros';
       }
       const info = $('#variant-info');
-      if (info) info.innerHTML = `SKU <strong>${esc(v.sku)}</strong>`;
+      if (info) info.innerHTML = `SKU <strong style="color: var(--navy-900);">${esc(v.sku)}</strong>`;
     }
 
     $$('.variant-pill').forEach(btn => {
@@ -505,7 +609,7 @@
       updateCartBadge();
       const btn = $('[data-add-cart]');
       const orig = btn.textContent;
-      btn.textContent = 'Adicionado ao carrinho ✓';
+      btn.textContent = 'Adicionado ✓';
       btn.disabled = true;
       setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1800);
     });
@@ -523,53 +627,53 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="9 6 15 12 9 18"/></svg>
             <span>Carrinho</span>
           </nav>
-          <div class="section-head" style="margin-top: 16px;">
+          <div class="section-head">
             <span class="eyebrow">Pedido</span>
-            <h1>Seu <span class="em-italic">carrinho.</span></h1>
+            <h1>Seu carrinho</h1>
           </div>
 
           ${CART.length === 0 ? `
-            <div style="text-align: center; padding: 64px 24px; background: var(--cream); border-radius: 12px;">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--slate-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 20px;"><path d="M6 7h12l-1 14H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
-              <h3 style="margin-bottom: 12px;">Carrinho vazio</h3>
-              <p class="lead" style="margin: 0 auto 24px;">Adicione produtos pra fechar pelo WhatsApp.</p>
-              <a href="#c/all" class="btn btn--primary">Ver catálogo</a>
+            <div style="text-align: center; padding: 56px 24px; background: var(--bg-soft); border-radius: var(--radius-md);">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 20px;"><path d="M6 7h12l-1 14H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+              <h3 style="margin-bottom: 8px;">Carrinho vazio</h3>
+              <p class="lead" style="margin: 0 auto 24px;">Adicione produtos e feche pelo WhatsApp.</p>
+              <a href="#cat/proteses" class="btn btn--primary">Ver produtos</a>
             </div>
           ` : `
-            <div style="display:grid; grid-template-columns: 1.6fr 1fr; gap: 56px;">
+            <div style="display:grid; grid-template-columns: 1.6fr 1fr; gap: 48px;">
               <div>
                 ${CART.map((c, i) => `
                   <div class="cart-line">
                     <div class="cart-line__image">${c.image?`<img src="${c.image}" alt="">`:''}</div>
                     <div>
-                      <p style="margin:0 0 4px; font-weight:600; line-height: 1.3;"><a href="#p/${c.handle}" style="color:var(--ink);">${esc(c.title)}</a></p>
-                      ${c.variantLabel && c.variantLabel !== 'Único' ? `<span class="meta" style="display: block; margin-bottom: 2px;">${esc(c.variantAxis || 'Variante')}: <strong style="color: var(--ink);">${esc(c.variantLabel)}</strong></span>` : ''}
+                      <p style="margin:0 0 4px; font-weight:700; line-height: 1.3; font-family: var(--font-title);"><a href="#p/${c.handle}" style="color:var(--navy-900);">${esc(c.title)}</a></p>
+                      ${c.variantLabel && c.variantLabel !== 'Único' ? `<span class="meta" style="display: block; margin-bottom: 2px;">${esc(c.variantAxis || 'Variante')}: <strong style="color: var(--navy-900);">${esc(c.variantLabel)}</strong></span>` : ''}
                       <span class="meta">SKU ${esc(c.sku)}</span>
                     </div>
                     <div>
-                      <input type="number" value="${c.qty}" min="1" data-cart-qty="${i}" style="width:64px; height:38px; padding:0 8px; border:1px solid var(--slate-200); border-radius:8px; text-align:center; font: inherit;">
+                      <input type="number" value="${c.qty}" min="1" data-cart-qty="${i}" style="width:64px; height:38px; padding:0 8px; border:1px solid var(--border); border-radius:var(--radius-pill); text-align:center; font: inherit; font-weight: 600;">
                     </div>
                     <div style="text-align:right;">
-                      <div style="font-weight:700; color:var(--ink);">${money((parseFloat(c.price)||0)*c.qty)}</div>
-                      <button data-cart-remove="${i}" style="background:none; border:0; color:var(--slate-500); font-size:12px; cursor:pointer; margin-top:4px; text-decoration:underline; font-family: inherit;">remover</button>
+                      <div style="font-weight:800; color:var(--navy-900); font-family: var(--font-title);">${money((parseFloat(c.price)||0)*c.qty)}</div>
+                      <button data-cart-remove="${i}" style="background:none; border:0; color:var(--text-muted); font-size:12px; cursor:pointer; margin-top:4px; text-decoration:underline; font-family: inherit;">remover</button>
                     </div>
                   </div>
                 `).join('')}
               </div>
               <aside class="cart-summary">
-                <h3 style="font-size: 16px; text-transform: uppercase; letter-spacing: 0.22em; color: var(--slate-500); margin: 0 0 20px; font-weight: 700;">Resumo</h3>
-                <div class="cart-summary__row"><span>Subtotal</span><span style="font-weight: 600;">${money(total)}</span></div>
-                <div class="cart-summary__row"><span>Frete</span><span style="color: var(--slate-500);">Cálculo via WhatsApp</span></div>
-                <div class="cart-summary__row" style="border-top:1px solid var(--slate-300); padding-top:14px; margin-top: 14px;">
+                <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 0 0 20px; font-weight: 800;">Resumo</h3>
+                <div class="cart-summary__row"><span>Subtotal</span><span style="font-weight: 700;">${money(total)}</span></div>
+                <div class="cart-summary__row"><span>Frete</span><span style="color: var(--text-muted);">Cálculo via WhatsApp</span></div>
+                <div class="cart-summary__row" style="border-top:1px solid var(--gray-300); padding-top:14px; margin-top: 14px;">
                   <strong class="cart-summary__total">Total</strong>
                   <strong class="cart-summary__total">${money(total)}</strong>
                 </div>
-                <p class="meta" style="margin:16px 0 24px; font-size: 12px;">Frete e impostos confirmados no atendimento.</p>
-                <button class="btn btn--whatsapp btn--block btn--lg" data-checkout-wpp>
+                ${total > 100 ? `<p style="font-size: 13px; color: var(--text-secondary); margin: 8px 0 16px;">${installment(total)} sem juros</p>` : ''}
+                <button class="btn btn--primary btn--block btn--lg" data-checkout-wpp>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-4.94A8 8 0 1 1 8 19.55L3 21z"/></svg>
                   Fechar pelo WhatsApp
                 </button>
-                <p style="font-size: 12px; color: var(--slate-500); margin-top: 16px; text-align: center;">A equipe valida estoque, frete e gera o link de pagamento.</p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 14px; text-align: center;">A equipe valida estoque, frete e gera o link de pagamento.</p>
               </aside>
             </div>
           `}
@@ -623,16 +727,16 @@
         <div class="container">
           <div class="section-head">
             <span class="eyebrow">Busca</span>
-            <h1 style="font-size: clamp(32px, 4.4vw, 48px);">${q ? `${results.length} resultados para <span class="em-italic">"${esc(q)}"</span>` : 'O que você procura?'}</h1>
+            <h1>${q ? `${results.length} resultados para "<em style="font-style:normal; color: var(--blue-700);">${esc(q)}</em>"` : 'O que você procura?'}</h1>
           </div>
           <form class="search-input-wrap" onsubmit="event.preventDefault(); location.hash='#search?q='+encodeURIComponent(this.q.value);">
-            <input class="input" type="search" name="q" value="${esc(q)}" placeholder="Buscar componente, marca ou SKU…" autofocus>
+            <input class="input" type="search" name="q" value="${esc(q)}" placeholder="Buscar produto, marca ou SKU…" autofocus>
             <button class="btn btn--primary" type="submit">Buscar</button>
           </form>
           ${q && results.length === 0 ? `
-            <div style="text-align: center; padding: 64px 24px; background: var(--cream); border-radius: 12px;">
-              <h3>Sem resultados.</h3>
-              <p class="lead" style="margin: 12px auto 24px;">Tente outra palavra — ou nos chame no WhatsApp.</p>
+            <div style="text-align: center; padding: 56px 24px; background: var(--bg-soft); border-radius: var(--radius-md);">
+              <h3>Sem resultados</h3>
+              <p class="lead" style="margin: 12px auto 24px;">Tente outra palavra — ou fale com a equipe.</p>
               <a href="https://wa.me/${WHATSAPP}" target="_blank" class="btn btn--whatsapp">Falar no WhatsApp</a>
             </div>
           ` : `
@@ -650,9 +754,12 @@
   //  Product card
   // ============================================================
   function productCard(p) {
-    const priceLabel = p.price_min
-      ? (p.price_min !== p.price_max && p.price_max ? `<span style="font-size: 12px; font-weight: 500; color: var(--slate-500); display: block; margin-bottom: 2px;">a partir de</span>${money(p.price_min)}` : money(p.price_min))
+    const hasPrice = !!p.price_min;
+    const isRange = hasPrice && p.price_min !== p.price_max && p.price_max;
+    const priceBlock = hasPrice
+      ? `${isRange ? '<span class="product-card__price-from">a partir de</span>' : ''}${money(p.price_min)}${parseFloat(p.price_min) > 100 ? `<div class="product-card__price-installment">${installment(p.price_min)}</div>` : ''}`
       : '<span class="product-card__price--no">sob consulta</span>';
+
     return `
       <a href="#p/${p.handle}" class="product-card">
         <div class="product-card__image">
@@ -661,8 +768,8 @@
         <div class="product-card__body">
           <span class="product-card__vendor">${esc(p.vendor)}</span>
           <p class="product-card__title">${esc(p.title)}</p>
-          ${p.cluster_size > 1 ? `<span class="product-card__sku" style="color: var(--teal-600); font-weight: 600;">${p.cluster_size} ${p.variant_axis ? p.variant_axis.toLowerCase() + 's' : 'opções'}</span>` : `<span class="product-card__sku">SKU ${esc(p.variants?.[0]?.sku || '')}</span>`}
-          <div class="product-card__price">${priceLabel}</div>
+          ${p.cluster_size > 1 ? `<span class="product-card__variants">${p.cluster_size} ${p.variant_axis ? p.variant_axis.toLowerCase() + 's' : 'opções'}</span>` : ''}
+          <div class="product-card__price">${priceBlock}</div>
         </div>
       </a>
     `;
@@ -678,17 +785,17 @@
 // ============================================================
 (function () {
   const RESPOSTAS = [
-    { match: ['liner', 'liners'], reply: 'Temos liners das principais marcas: <em>Össur</em> (Iceross Comfort Locking), <em>Blumentec</em> (Alpha Element), <em>ALPS</em> (Smart Seal) e <em>ProKinetics</em> (SUPREME). Cada liner tem versões em diferentes espessuras (3mm, 6mm, 9mm) — escolhidas na própria página do produto. Me conta um pouco da situação?' },
-    { match: ['joelho', 'joelhos'], reply: 'Joelhos disponíveis: hidráulicos rotativos (3R80 Ottobock), policêntricos, microprocessados. A escolha depende do peso, idade e nível de atividade. Você já tem prescrição do protesista?' },
-    { match: ['pé', 'pe ', 'pes ', 'fibra de carbono'], reply: 'Temos pés desde os SACH tradicionais até linha de fibra de carbono (Pro-Flex Össur, Taleo Ottobock). Pra qual nível de atividade — caminhada doméstica, trabalho, ou esportes?' },
-    { match: ['preço', 'preco', 'valor', 'custo', 'orçamento', 'orcamento'], reply: 'Cada produto tem o preço visível no catálogo. Quando o produto tem variantes (tamanho, espessura), o preço pode mudar — selecione a variante na página dele. Para itens "sob consulta", orçamento sai em 1 dia útil pelo WhatsApp.' },
-    { match: ['entrega', 'frete', 'envio', 'prazo'], reply: 'Pronta-entrega pros itens marcados como "Em estoque": <em>3 dias úteis</em> pra SP capital, 5-7 dias pro restante do Brasil.' },
-    { match: ['variante', 'variantes', 'tamanho', 'tamanhos', 'opções', 'opcoes'], reply: 'Cada produto-pai agrupa todas as variantes disponíveis. Na página, você seleciona <em>tamanho</em>, <em>lado</em>, <em>espessura</em> ou <em>conexão</em> nos botões abaixo do preço. O SKU específico aparece quando a variante é escolhida.' },
-    { match: ['oi', 'olá', 'ola', 'bom dia', 'boa tarde'], reply: 'Oi! Aqui é a equipe da <em>minha prótese</em>. Pode contar o que precisa — componente, paciente, prescrição.' },
+    { match: ['liner', 'liners'], reply: 'Temos liners das principais marcas: <em>Össur</em> (Iceross Comfort Locking), <em>WillowWood</em> (Alpha Element), <em>ALPS</em> (Smart Seal) e <em>ProKinetics</em> (SUPREME). Cada liner tem versões em diferentes espessuras (3mm, 6mm, 9mm) — escolhidas na própria página do produto.' },
+    { match: ['joelho', 'joelhos'], reply: 'Joelhos disponíveis: hidráulicos rotativos (3R80 Ottobock), policêntricos, microprocessados. Você já tem prescrição do protesista?' },
+    { match: ['pé', 'pe ', 'pes ', 'fibra de carbono'], reply: 'Temos pés desde os SACH tradicionais até linha de fibra de carbono (Pro-Flex Össur, Taleo Ottobock, META WillowWood). Pra qual nível de atividade — caminhada doméstica, trabalho, ou esportes?' },
+    { match: ['preço', 'preco', 'valor', 'custo', 'orçamento', 'orcamento', 'parcela'], reply: 'Cada produto tem o preço visível no catálogo, com opção de parcelamento em até 12x sem juros. Para itens "sob consulta", orçamento sai em 1 dia útil pelo WhatsApp.' },
+    { match: ['entrega', 'frete', 'envio', 'prazo'], reply: 'Pronta-entrega pros itens marcados "Em estoque": <em>3 dias úteis</em> pra SP capital, 5-7 dias pro restante do Brasil. Entregamos pra todo o país.' },
+    { match: ['variante', 'variantes', 'tamanho', 'tamanhos', 'opções', 'opcoes'], reply: 'Cada produto agrupa todas as variantes disponíveis. Na página, você seleciona <em>tamanho</em>, <em>lado</em>, <em>espessura</em> ou <em>conexão</em> nos botões abaixo do preço.' },
+    { match: ['oi', 'olá', 'ola', 'bom dia', 'boa tarde'], reply: 'Oi! Aqui é o atendimento da <em>minhaprotese.com.br</em>. Pode contar o que precisa — componente, paciente, prescrição.' },
     { match: ['dor', 'inflamado', 'machucou', 'cirurgia'], reply: 'Isso é melhor ver direto com a equipe. Toque em <em>Falar no WhatsApp agora</em> aqui embaixo que continuamos por lá.', handoff: true },
     { match: ['humano', 'pessoa', 'atendente'], reply: 'Claro, te passo pra equipe. <em>Falar no WhatsApp agora</em> aqui embaixo te conecta direto com um atendente.', handoff: true },
   ];
-  const fallback = 'Recebi sua mensagem. Pra uma resposta personalizada, toque em <em>Falar no WhatsApp agora</em> aqui embaixo. (Este chat está em modo demonstração; a IA treinada entra no ar quando o endpoint Vercel for plugado.)';
+  const fallback = 'Recebi sua mensagem. Pra uma resposta personalizada, toque em <em>Falar no WhatsApp agora</em>. (Este chat está em modo demonstração; a IA treinada entra no ar quando o endpoint for plugado.)';
 
   window.mpChatHandler = function (text, addMsg) {
     const k = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');

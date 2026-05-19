@@ -1,0 +1,63 @@
+{
+  "brand": {
+    "name": "minhaprotese.com.br",
+    "tagline": "MOBILIDADE. AUTONOMIA. POSSIBILIDADES.",
+    "positioning": "A minhaprotese.com.br é sua loja online especializada em próteses, órteses e produtos de mobilidade.",
+    "separation_note": "A marca deve ser totalmente independente da Da Vinci Clinic: não usar verde-água/laranja da Da Vinci como sistema principal, não usar linguagem de clínica boutique e não mencionar Da Vinci na experiência do e-commerce."
+  },
+  "colors": {
+    "navy_900": "#0D1B2A",
+    "blue_700": "#1E5BB8",
+    "orange_500": "#F28C28",
+    "amber_300": "#FFC66D",
+    "gray_200": "#E6E9EF",
+    "white_50": "#F7F8FA"
+  },
+  "typography": {
+    "headline": "Manrope ExtraBold",
+    "support": "Manrope Medium",
+    "body": "Inter Regular"
+  },
+  "buttons": {
+    "primary": {
+      "label_examples": [
+        "Ver produtos",
+        "Comprar agora"
+      ],
+      "background": "#1E5BB8",
+      "text": "#FFFFFF",
+      "radius": "999px",
+      "height": "44px",
+      "padding": "0 22px"
+    },
+    "orange_offer": {
+      "label_examples": [
+        "20% OFF"
+      ],
+      "background": "#F28C28",
+      "text": "#FFFFFF",
+      "radius": "8px"
+    }
+  },
+  "navigation": [
+    "Próteses",
+    "Órteses",
+    "Mobilidade",
+    "Acessórios",
+    "Marcas",
+    "Ofertas"
+  ],
+  "trust_items": [
+    "Compra segura",
+    "Atendimento especializado",
+    "Entrega para todo o Brasil",
+    "Parcele em até 12x",
+    "Troca fácil"
+  ],
+  "categories": {
+    "Próteses": "Desempenho e liberdade",
+    "Órteses": "Suporte e estabilidade",
+    "Mobilidade": "Mais autonomia no dia a dia",
+    "Acessórios": "Conforto e praticidade"
+  }
+}

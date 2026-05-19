@@ -3,59 +3,72 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#14B4B4">
-  <title>minha prótese — componentes para prótese e órtese</title>
-  <meta name="description" content="E-commerce especializado em componentes para prótese e órtese. Catálogo curado das principais marcas — Össur, Ottobock, Blumentec, ALPS — com atendimento técnico e entrega rápida.">
-  <link rel="icon" href="../../brand/logo/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0D1B2A">
+  <title>minhaprotese.com.br — Próteses, órteses e mobilidade</title>
+  <meta name="description" content="Tecnologia e cuidado para cada passo da sua jornada. Próteses, órteses e produtos de mobilidade com qualidade, conforto e confiança. Compra segura, atendimento especializado, entrega para todo o Brasil.">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Newsreader:ital,wght@1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Pular para o conteúdo</a>
 
+  <!-- Trust bar superior -->
+  <div class="trustbar">
+    <div class="container trustbar__inner">
+      <span class="trustbar__item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/></svg>
+        Compra segura
+      </span>
+      <span class="trustbar__item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-7a9 9 0 0 1 18 0v7"/><path d="M3 15h3v6H4a1 1 0 0 1-1-1v-5z"/><path d="M21 15h-3v6h2a1 1 0 0 0 1-1v-5z"/></svg>
+        Atendimento especializado
+      </span>
+      <span class="trustbar__item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h12v9H3z"/><path d="M15 10h4l2 3v3h-6"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+        Entrega para todo o Brasil
+      </span>
+    </div>
+  </div>
+
+  <!-- Header principal -->
   <header class="site-header">
-    <div class="container site-header__inner">
-      <a href="#" class="site-header__logo" aria-label="minha prótese">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120">
-          <g transform="translate(0,8)">
-            <path d="M14 84 A 50 50 0 0 1 96 30" fill="none" stroke="#14B4B4" stroke-width="6" stroke-linecap="round"/>
-            <line x1="58" y1="22" x2="92" y2="60" stroke="#1F262B" stroke-width="10" stroke-linecap="round"/>
-            <line x1="92" y1="60" x2="76" y2="100" stroke="#1F262B" stroke-width="10" stroke-linecap="round"/>
-            <circle cx="92" cy="60" r="9" fill="#FAF6F0" stroke="#14B4B4" stroke-width="4"/>
-            <circle cx="92" cy="60" r="2.5" fill="#F09020"/>
-          </g>
-          <g transform="translate(130,72)" font-family="Lexend, sans-serif" font-weight="600">
-            <text x="0" y="0" font-size="44" letter-spacing="-1.2" fill="#1F262B">minha</text>
-            <circle cx="148" cy="-12" r="4.5" fill="#F09020"/>
-            <text x="164" y="0" font-size="44" letter-spacing="-1.2" fill="#1F262B">prótese</text>
-          </g>
-        </svg>
+    <div class="container site-header__main">
+      <a href="#" class="site-header__logo" aria-label="minhaprotese.com.br">
+        <img src="assets/logo.svg" alt="minhaprotese.com.br" style="height: 38px;">
       </a>
 
-      <nav class="site-header__nav" aria-label="Menu principal">
-        <a href="#c/all">Catálogo</a>
-        <a href="#c/vendor-ossur">Össur</a>
-        <a href="#c/vendor-ottobock">Ottobock</a>
-        <a href="#c/vendor-willowwood">WillowWood</a>
-        <a href="#c/vendor-alps">ALPS</a>
-        <a href="#c/vendor-polior">Outras marcas</a>
-      </nav>
+      <form class="site-header__search" onsubmit="event.preventDefault(); location.hash='#search?q='+encodeURIComponent(this.q.value);">
+        <input type="search" name="q" placeholder="Buscar produtos..." aria-label="Buscar produtos">
+        <button type="submit" aria-label="Buscar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+      </form>
 
       <div class="site-header__actions">
-        <a href="#search" class="icon-btn" aria-label="Buscar">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        </a>
         <a href="#" class="icon-btn" aria-label="Minha conta">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
         </a>
         <a href="#cart" class="icon-btn" aria-label="Carrinho">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 14H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 14H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
           <span class="icon-btn__count" data-cart-count style="display:none;">0</span>
         </a>
       </div>
     </div>
+
+    <!-- Menu de categorias -->
+    <nav class="site-nav" aria-label="Categorias">
+      <div class="container site-nav__inner">
+        <a href="#cat/proteses">Próteses</a>
+        <a href="#cat/orteses">Órteses</a>
+        <a href="#cat/mobilidade">Mobilidade</a>
+        <a href="#cat/acessorios">Acessórios</a>
+        <a href="#brands">Marcas</a>
+        <a href="#cat/ofertas" class="is-orange">Ofertas</a>
+      </div>
+    </nav>
   </header>
 
   <main id="main"></main>
@@ -64,32 +77,19 @@
     <div class="container">
       <div class="site-footer__grid">
         <div class="site-footer__col">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" style="height:32px;">
-            <g transform="translate(0,8)">
-              <path d="M14 84 A 50 50 0 0 1 96 30" fill="none" stroke="#46C4C4" stroke-width="6" stroke-linecap="round"/>
-              <line x1="58" y1="22" x2="92" y2="60" stroke="#FAF6F0" stroke-width="10" stroke-linecap="round"/>
-              <line x1="92" y1="60" x2="76" y2="100" stroke="#FAF6F0" stroke-width="10" stroke-linecap="round"/>
-              <circle cx="92" cy="60" r="9" fill="#1F262B" stroke="#46C4C4" stroke-width="4"/>
-              <circle cx="92" cy="60" r="2.5" fill="#F09020"/>
-            </g>
-            <g transform="translate(130,72)" font-family="Lexend, sans-serif" font-weight="600">
-              <text x="0" y="0" font-size="44" letter-spacing="-1.2" fill="#FAF6F0">minha</text>
-              <circle cx="148" cy="-12" r="4.5" fill="#F09020"/>
-              <text x="164" y="0" font-size="44" letter-spacing="-1.2" fill="#FAF6F0">prótese</text>
-            </g>
-          </svg>
-          <p class="meta" style="margin-top: 24px; max-width: 38ch; line-height: 1.65;">Componentes de prótese e órtese com curadoria técnica. Atendimento consultivo de quem entende do assunto.</p>
+          <img src="assets/logo.svg" alt="minhaprotese.com.br" style="height: 36px; filter: brightness(0) invert(1) opacity(0.95);">
+          <p class="meta" style="margin-top: 20px; max-width: 38ch; line-height: 1.65; color: #CBD0DA;">
+            Tecnologia e cuidado para cada passo da sua jornada. Próteses, órteses e produtos de mobilidade com qualidade, conforto e confiança.
+          </p>
         </div>
         <div class="site-footer__col">
-          <h4>Marcas</h4>
+          <h4>Categorias</h4>
           <ul>
-            <li><a href="#c/vendor-ossur">Össur</a></li>
-            <li><a href="#c/vendor-ottobock">Ottobock</a></li>
-            <li><a href="#c/vendor-willowwood">WillowWood</a></li>
-            <li><a href="#c/vendor-alps">ALPS</a></li>
-            <li><a href="#c/vendor-polior">Polior</a></li>
-            <li><a href="#c/vendor-prokinetics">ProKinetics</a></li>
-            <li><a href="#c/all">Ver todas</a></li>
+            <li><a href="#cat/proteses">Próteses</a></li>
+            <li><a href="#cat/orteses">Órteses</a></li>
+            <li><a href="#cat/mobilidade">Mobilidade</a></li>
+            <li><a href="#cat/acessorios">Acessórios</a></li>
+            <li><a href="#cat/ofertas">Ofertas</a></li>
           </ul>
         </div>
         <div class="site-footer__col">
@@ -99,19 +99,20 @@
             <li><a href="#">Como comprar</a></li>
             <li><a href="#">Frete e prazos</a></li>
             <li><a href="#">Trocas e devoluções</a></li>
+            <li><a href="#">Parcele em até 12x</a></li>
           </ul>
         </div>
         <div class="site-footer__col">
           <h4>Contato</h4>
           <ul>
-            <li class="meta">contato@minhaprotese.com.br</li>
-            <li class="meta">+55 11 0000-0000</li>
-            <li class="meta" style="margin-top: 12px;">São Paulo · SP</li>
+            <li>contato@minhaprotese.com.br</li>
+            <li>+55 11 0000-0000</li>
+            <li style="margin-top: 12px;">São Paulo · SP</li>
           </ul>
         </div>
       </div>
       <div class="site-footer__bottom">
-        <span>© 2026 minha prótese</span>
+        <span>© 2026 minhaprotese.com.br · MOBILIDADE. AUTONOMIA. POSSIBILIDADES.</span>
         <span><a href="#">Privacidade</a> · <a href="#">Termos</a> · <a href="#">Trocas</a></span>
       </div>
     </div>
@@ -123,12 +124,12 @@
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-4.94A8 8 0 1 1 8 19.55L3 21z"/><path d="M8.5 9.5c.5 2 2 3.5 4 4"/></svg>
       <span class="mp-chat__fab-label">Tirar dúvida</span>
     </button>
-    <div class="mp-chat__panel" role="dialog" aria-label="Atendimento minha prótese">
+    <div class="mp-chat__panel" role="dialog" aria-label="Atendimento minhaprotese.com.br">
       <header class="mp-chat__header">
         <div style="display:flex; align-items:center; gap:12px;">
           <span class="mp-chat__avatar">mp</span>
           <div>
-            <strong style="display:block; font-size:14px; color:#fff;">Atendimento minha prótese</strong>
+            <strong style="display:block; font-size:14px; color:#fff; font-family: 'Manrope', sans-serif;">Atendimento minhaprotese</strong>
             <span style="font-size:12px; color: rgba(255,255,255,0.7);">Em média respondemos em 2 min</span>
           </div>
         </div>
@@ -138,12 +139,12 @@
       </header>
       <div class="mp-chat__messages" id="chat-msgs">
         <div class="mp-chat__msg mp-chat__msg--in">
-          Oi! Aqui é a equipe da <em>minha prótese</em>. Conta pra gente o que você está procurando — pode falar do componente, do paciente ou da prescrição.
+          Oi! Aqui é o atendimento da <em>minhaprotese.com.br</em>. Pode contar o que precisa — produto, paciente, prescrição — que te ajudo a encontrar.
         </div>
       </div>
       <form class="mp-chat__form" id="chat-form">
         <input class="mp-chat__input" type="text" name="message" placeholder="Pergunte sobre um produto" required autocomplete="off">
-        <button class="btn btn--whatsapp btn--sm">Enviar</button>
+        <button class="btn btn--primary btn--sm">Enviar</button>
       </form>
       <div class="mp-chat__cta">
         <a href="https://wa.me/5511000000000" target="_blank" rel="noopener" class="btn btn--whatsapp btn--block">
@@ -156,7 +157,6 @@
 
   <script src="app.js"></script>
   <script>
-    // Chat handler — toggle e dispatcher
     (function () {
       const chat = document.getElementById('mp-chat');
       document.querySelectorAll('[data-mp-toggle]').forEach(b => b.addEventListener('click', () => {

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">Ícone minhaprotese.com.br</title>
+<desc id="desc">Símbolo de movimento da minhaprotese.com.br em azul-marinho e laranja.</desc>
+<rect x="24" y="24" width="464" height="464" rx="92" fill="#FFFFFF"/>
+<circle cx="237" cy="100" r="34" fill="#0D1B2A"/>
+<circle cx="248" cy="383" r="29" fill="#0D1B2A"/>
+<path d="M82 236 C162 136, 244 173, 358 144 C310 211, 222 189, 133 259 Z" fill="#0D1B2A"/>
+<path d="M102 366 C188 215, 281 178, 331 219 C270 260, 232 327, 143 415 Z" fill="#F28C28"/>
+</svg>
