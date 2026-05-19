@@ -408,11 +408,11 @@ p  { margin: 0; }
 .hero-carousel {
   position: relative;
   width: 100%;
-  background: #FFFFFF;
+  background: #F8F8F9;
   overflow: hidden;
-  /* Aspect ratio 16:9 — todos os 3 banners padronizados em 1800x1012 */
-  aspect-ratio: 1800 / 1012;
-  max-height: 70vh;
+  /* Aspect ratio 2:1 — todos os 3 banners padronizados em 1800x900 */
+  aspect-ratio: 2 / 1;
+  max-height: 64vh;
 }
 .hero-carousel__track {
   position: relative;
@@ -441,22 +441,27 @@ p  { margin: 0; }
   display: block;
 }
 
-/* Tablet — mantém 16:9 mas limita altura */
+/* Tablet — mantém 2:1 mas limita altura */
 @media (max-width: 920px) {
-  .hero-carousel { max-height: 56vh; }
+  .hero-carousel { max-height: 50vh; }
 }
 
-/* Mobile — recorta zoom no lado esquerdo (logo+texto) e diminui altura */
+/* Mobile — vertical: aspect 4:5, mostra o lado esquerdo (logo + título + CTA) */
 @media (max-width: 600px) {
   .hero-carousel {
-    aspect-ratio: 4 / 3;
-    max-height: 60vh;
+    aspect-ratio: 4 / 5;
+    max-height: 75vh;
+    background: #F8F8F9;
   }
   .hero-carousel__slide img {
-    object-position: 25% center;
-    transform: scale(1.05);
-    transform-origin: 25% center;
+    object-fit: cover;
+    object-position: 18% center;
   }
+}
+
+/* Mobile pequeno — aspect ainda mais vertical (1:1) pra caber */
+@media (max-width: 380px) {
+  .hero-carousel { aspect-ratio: 1 / 1; }
 }
 
 /* Setas */
