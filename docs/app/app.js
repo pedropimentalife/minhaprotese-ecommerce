@@ -154,7 +154,7 @@
             <div class="pillar">
               <div class="pillar__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
               <h3>Garantia de origem</h3>
-              <p>Distribuidores autorizados — Össur, Ottobock, Blumentec, Ortho Pauher, ALPS, Dilepé, Polior, Ethnos, ProKinetics.</p>
+              <p>Distribuidores autorizados — Össur, Ottobock, WillowWood, Ortho Pauher, ALPS, Polior, ProKinetics, Ethnos, Circleg, TuboMed.</p>
             </div>
             <div class="pillar">
               <div class="pillar__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-7a9 9 0 0 1 18 0v7"/><path d="M3 15h3v6H4a1 1 0 0 1-1-1v-5z"/><path d="M21 15h-3v6h2a1 1 0 0 0 1-1v-5z"/></svg></div>
@@ -185,13 +185,30 @@
     window.scrollTo(0, 0);
   }
 
+  const VENDOR_META = {
+    'Össur':        { origin: 'Islândia',  tag: 'Premium',     desc: 'Pés Pro-Flex, joelhos Aspire, liners Iceross.' },
+    'Ottobock':     { origin: 'Alemanha',  tag: 'Tradicional', desc: 'Joelhos 3R80, C-Leg, pés SACH e Taleo.' },
+    'WillowWood':   { origin: 'EUA',       tag: 'Liners Alpha',desc: 'Liners Alpha e pés META em fibra de carbono.' },
+    'ALPS':         { origin: 'EUA',       tag: 'Liners',      desc: 'Liners em gel e silicone para nível K2-K4.' },
+    'Polior':       { origin: 'Brasil',    tag: 'Nacional',    desc: 'Componentes modulares e adaptadores.' },
+    'ProKinetics':  { origin: 'Brasil',    tag: 'Articulações',desc: 'Articulações de joelho, liners SUPREME e VACUUM.' },
+    'Ortho Pauher': { origin: 'Brasil',    tag: 'Acessórios',  desc: 'Meias para coto, órteses e acessórios.' },
+    'Ethnos':       { origin: 'Brasil',    tag: 'Sistemas',    desc: 'Sistema VIP de válvulas e kits RevoFit.' },
+    'Circleg':      { origin: 'Suíça',     tag: 'Modular',     desc: 'Joelho e pé dinâmico modulares e leves.' },
+    'TuboMed':      { origin: 'Canadá',    tag: 'Pé caído',    desc: 'Órteses AFO externas XTERN para pé caído.' },
+    'Paralid':      { origin: 'Internacional', tag: 'Dedos',   desc: 'Próteses funcionais de dedo e polegar.' },
+  };
+
   function vendorCards() {
-    const vendors = ['Össur', 'Ottobock', 'Blumentec', 'ALPS', 'Polior', 'ProKinetics', 'Ortho Pauher', 'Ethnos'];
+    const vendors = ['Össur', 'Ottobock', 'WillowWood', 'ALPS', 'Polior', 'ProKinetics', 'Ortho Pauher', 'Ethnos', 'Circleg', 'TuboMed'];
     return vendors.map(v => {
       const count = CATALOG.filter(p => p.vendor === v).reduce((a, p) => a + p.cluster_size, 0);
       const products = CATALOG.filter(p => p.vendor === v).length;
+      if (products === 0) return '';
+      const meta = VENDOR_META[v] || {};
       return `
         <a href="#c/vendor-${slug(v)}" class="category-card">
+          ${meta.origin ? `<span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em; color: var(--slate-500); font-weight: 700; margin-bottom: 4px;">${esc(meta.origin)}</span>` : ''}
           <h3 class="category-card__title">${v}</h3>
           <span class="category-card__count">${products} produtos · ${count} SKUs</span>
         </a>

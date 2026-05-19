@@ -1,15 +1,15 @@
 # Audit de duplicações — minha prótese
 
-**Antes**: 1027 SKUs
-**Depois**: 758 produtos-pai (redução de 269 linhas duplicadas)
+**Antes**: 966 SKUs
+**Depois**: 700 produtos-pai (redução de 266 linhas duplicadas)
 **Clusters por imagem (match SKU benchmark)**: 6
-**Clusters por nome do PDF**: 84
-**SKUs agrupados em variantes**: 359
-**Singletons (produtos únicos)**: 668
+**Clusters por nome do PDF**: 81
+**SKUs agrupados em variantes**: 353
+**Singletons (produtos únicos)**: 613
 
 ## Clusters consolidados
 
-### Blumentec · Meta Core, 22cm, direito, cat.2, com capa
+### WillowWood · Meta Core, 22cm, direito, cat.2, com capa
 - Eixo de variação detectado: **Lado**
 - Variantes: 24
 - Preço: R$  – R$  (média R$ )
@@ -28,7 +28,7 @@
 | Direito (M001-25R-06) | `M001-25R-06` | R$ — | Meta Core, 25cm, direito, cat.6, com capa |
 | ... | _+14 variantes_ | | |
 
-### Blumentec · Meta Core LP, 22cm, direito, cat.2, com capa
+### WillowWood · Meta Core LP, 22cm, direito, cat.2, com capa
 - Eixo de variação detectado: **Lado**
 - Variantes: 24
 - Preço: R$  – R$  (média R$ )
@@ -47,7 +47,7 @@
 | Direito (M011-25R-06) | `M011-25R-06` | R$ — | Meta Core LP, 25cm, direito, cat.6, com capa |
 | ... | _+14 variantes_ | | |
 
-### Blumentec · Meta Arc, 22cm, direito, cat.2, com capa
+### WillowWood · Meta Arc, 22cm, direito, cat.2, com capa
 - Eixo de variação detectado: **Lado**
 - Variantes: 24
 - Preço: R$  – R$  (média R$ )
@@ -66,7 +66,7 @@
 | Direito (M002-25R-06) | `M002-25R-06` | R$ — | Meta Arc, 25cm, direito, cat.6, com capa |
 | ... | _+14 variantes_ | | |
 
-### Blumentec · Meta Flow, 22cm, direito, cat.2, com capa
+### WillowWood · Meta Flow, 22cm, direito, cat.2, com capa
 - Eixo de variação detectado: **Lado**
 - Variantes: 24
 - Preço: R$  – R$  (média R$ )
@@ -85,7 +85,7 @@
 | Direito (M007-25R-06) | `M007-25R-06` | R$ — | Meta Flow, 25cm, direito, cat.6, com capa |
 | ... | _+14 variantes_ | | |
 
-### Blumentec · Cobertura cosmética, dedos separados, 22cm, direito, bege
+### WillowWood · Cobertura cosmética, dedos separados, 22cm, direito, bege
 - Eixo de variação detectado: **Lado**
 - Variantes: 16
 - Preço: R$  – R$  (média R$ )
@@ -104,7 +104,7 @@
 | Direito (FS01-26RB) | `FS01-26RB` | R$ — | Cobertura cosmética, dedos separados, 26cm, direito, bege |
 | ... | _+6 variantes_ | | |
 
-### Blumentec · Cobertura cosmética, 22cm, direito, bege
+### WillowWood · Cobertura cosmética, 22cm, direito, bege
 - Eixo de variação detectado: **Lado**
 - Variantes: 16
 - Preço: R$  – R$  (média R$ )
@@ -167,7 +167,7 @@
 | 30 | `9F81-30` | R$ — | Cone de PVA 30 cm (2 un) |
 | 35 | `9F81-35` | R$ — | Cone de PVA 35 cm (2 un) |
 
-### Blumentec · Liner Alpha TruSeal TF, em silicone, sem tecido, cilíndrico 32 cm
+### WillowWood · Liner Alpha TruSeal TF, em silicone, sem tecido, cilíndrico 32 cm
 - Eixo de variação detectado: **Código**
 - Variantes: 6
 - Preço: R$ 4745.72 – R$ 4745.72 (média R$ 4745.72)
@@ -409,7 +409,7 @@
 | 12 mm | `9T60-12` | R$ — | Placa FLEXÍVEL BLACK, super-soft 12 mm, 40 x 40 cm (un) 458, |
 | 15 mm | `9T60-15` | R$ — | Placa FLEXÍVEL BLACK, super-soft 15 mm, 40 x 40 cm (un) 588, |
 
-### Blumentec · Médio + 1 S350-6594-1
+### WillowWood · Médio + 1 S350-6594-1
 - Eixo de variação detectado: **Código**
 - Variantes: 3
 - Preço: R$  – R$  (média R$ )
@@ -420,7 +420,7 @@
 | S352-6594-2 | `S352-6594-2` | R$ — | Médio + 2 S350-6594-2 |
 | S352-6594-3 | `S352-6594-3` | R$ — | Médio + 3 S350-6594-3 |
 
-### Blumentec · Liner Alpha Silicone TT, em silicone e tecido, progressivo, cinza claro/cinza, conexão sem pino, médio plus-1
+### WillowWood · Liner Alpha Silicone TT, em silicone e tecido, progressivo, cinza claro/cinza, conexão sem pino, médio plus-1
 - Eixo de variação detectado: **Código**
 - Variantes: 3
 - Preço: R$ 2920.09 – R$ 2920.09 (média R$ 2920.09)
@@ -431,7 +431,7 @@
 | S350-6594-2 | `S350-6594-2` | R$ 2920.09 | Liner Alpha Silicone TT, em silicone e tecido, progressivo,  |
 | S350-6594-3 | `S350-6594-3` | R$ 2920.09 | Liner Alpha Silicone TT, em silicone e tecido, progressivo,  |
 
-### Blumentec · Liner Alpha SmartTemp TT, em silicone, progressivo, cinza claro/cinza, conexão sem pino médio plus
+### WillowWood · Liner Alpha SmartTemp TT, em silicone, progressivo, cinza claro/cinza, conexão sem pino médio plus
 - Eixo de variação detectado: **Código**
 - Variantes: 3
 - Preço: R$ 2920.09 – R$ 2920.09 (média R$ 2920.09)
@@ -566,7 +566,7 @@
 | 9N20-100 | `9N20-100` | R$ 850.00 | Tecido fibra de CARBONO 200 g/m², larg. 100 cm (metro²) 346, |
 | 9N24-100 | `9N24-100` | R$ 850.00 | Tecido fibra de CARBONO 240 g/m², larg. 100 cm (metro²) 346, |
 
-### Blumentec · Pequeno 1 S350-6593-1
+### WillowWood · Pequeno 1 S350-6593-1
 - Eixo de variação detectado: **Código**
 - Variantes: 2
 - Preço: R$  – R$  (média R$ )
@@ -576,7 +576,7 @@
 | S352-6593-1 | `S352-6593-1` | R$ — | Pequeno 1 S350-6593-1 |
 | S352-6593-2 | `S352-6593-2` | R$ — | Pequeno 2 S350-6593-2 |
 
-### Blumentec · Médio 1 S350-6590-1
+### WillowWood · Médio 1 S350-6590-1
 - Eixo de variação detectado: **Código**
 - Variantes: 2
 - Preço: R$  – R$  (média R$ )
@@ -586,7 +586,7 @@
 | S352-6590-1 | `S352-6590-1` | R$ — | Médio 1 S350-6590-1 |
 | S352-6590-2 | `S352-6590-2` | R$ — | Médio 2 S350-6590-2 |
 
-### Blumentec · Grande 1 S350-6596-1
+### WillowWood · Grande 1 S350-6596-1
 - Eixo de variação detectado: **Código**
 - Variantes: 2
 - Preço: R$  – R$  (média R$ )
@@ -596,7 +596,7 @@
 | S352-6596-1 | `S352-6596-1` | R$ — | Grande 1 S350-6596-1 |
 | S352-6596-2 | `S352-6596-2` | R$ — | Grande 2 S350-6596-2 |
 
-### Blumentec · Extra Grande T350-6597-1
+### WillowWood · Extra Grande T350-6597-1
 - Eixo de variação detectado: **Código**
 - Variantes: 2
 - Preço: R$  – R$  (média R$ )
@@ -606,7 +606,7 @@
 | S352-6597-1 | `S352-6597-1` | R$ — | Extra Grande T350-6597-1 |
 | T352-6597-1 | `T352-6597-1` | R$ — | Extra Grande T350-6597-1 |
 
-### Blumentec · Pequeno 1 T350-6593-1
+### WillowWood · Pequeno 1 T350-6593-1
 - Eixo de variação detectado: **Código**
 - Variantes: 2
 - Preço: R$  – R$  (média R$ )
@@ -616,7 +616,7 @@
 | T352-6593-1 | `T352-6593-1` | R$ — | Pequeno 1 T350-6593-1 |
 | T352-6593-2 | `T352-6593-2` | R$ — | Pequeno 2 T350-6593-2 |
 
-### Blumentec · Médio 1 T350-6590-1
+### WillowWood · Médio 1 T350-6590-1
 - Eixo de variação detectado: **Código**
 - Variantes: 2
 - Preço: R$  – R$  (média R$ )

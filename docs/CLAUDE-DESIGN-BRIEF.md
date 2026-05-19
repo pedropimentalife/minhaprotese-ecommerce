@@ -6,7 +6,7 @@
 
 ## O que construir
 
-Um **e-commerce em página única (SPA)** ou app React polido para **minha prótese**, e-commerce brasileiro de componentes para prótese e órtese de membros (Össur, Ottobock, Blumentec, ALPS, Polior, ProKinetics, Ortho Pauher, Ethnos). Catálogo de **1.027 SKUs**, com **262 produtos com preço e foto reais**. Checkout via **WhatsApp** (modelo comum no varejo brasileiro). Chat IA flutuante com respostas inteligentes sobre o catálogo.
+Um **e-commerce em página única (SPA)** ou app React polido para **minha prótese**, e-commerce brasileiro de componentes para prótese e órtese de membros. Catálogo de **966 SKUs consolidados em 700 produtos-pai** (variantes agrupadas — tamanho, lado, espessura), de 10 marcas fabricantes diretas: Össur (Islândia), Ottobock (Alemanha), WillowWood (EUA, distribuída no Brasil pela Blumentec), ALPS (EUA), Polior (Brasil), ProKinetics (Brasil), Ortho Pauher (Brasil), Ethnos (Brasil), Circleg (Suíça) e TuboMed (Canadá). Checkout via **WhatsApp** (modelo comum no varejo brasileiro). Chat IA flutuante com respostas inteligentes sobre o catálogo.
 
 Stack sugerida: **React + Tailwind + Lucide icons**. Use componentes shadcn/ui onde fizer sentido (Card, Sheet para o carrinho, Dialog para o chat, etc.). Imagens já hospedadas em CDN — endereços reais nas amostras abaixo.
 
