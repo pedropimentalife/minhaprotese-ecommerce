@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 200" role="img" aria-labelledby="t">
+  <title id="t">minhaprotese.com.br</title>
+  <g transform="translate(20 8)">
+    <circle cx="84" cy="28" r="18" fill="#0D1B2A"/>
+    <circle cx="91" cy="170" r="15" fill="#0D1B2A"/>
+    <path d="M10 100 C54 46, 100 66, 160 54 C132 92, 85 80, 38 118 Z" fill="#0D1B2A"/>
+    <path d="M22 178 C68 100, 118 78, 145 100 C112 122, 91 158, 42 203 Z" fill="#F28C28"/>
+  </g>
+  <text x="235" y="135" font-family="Manrope, Inter, Arial, sans-serif" font-weight="700" font-size="120" letter-spacing="-3" fill="#0D1B2A">minhaprotese</text>
+  <text x="800" y="135" font-family="Manrope, Inter, Arial, sans-serif" font-weight="700" font-size="120" letter-spacing="-3" fill="#F28C28">.com.br</text>
+</svg>

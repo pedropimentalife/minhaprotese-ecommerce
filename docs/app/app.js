@@ -147,8 +147,8 @@
               </div>
             </div>
 
-            <div class="hero__visual">
-              <img src="assets/hero-photo.jpg" alt="Pessoa caminhando com prótese de fibra de carbono em ambiente externo, luz natural" width="860" height="591" loading="eager">
+            <div class="hero__visual hero__visual--svg">
+              <img src="assets/hero-illustration.svg?v=3" alt="minhaprotese.com.br — mobilidade, autonomia, possibilidades" width="800" height="600" loading="eager">
             </div>
           </div>
         </div>

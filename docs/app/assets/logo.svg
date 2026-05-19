@@ -1,17 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="280" viewBox="0 0 1200 280" role="img" aria-labelledby="title desc">
-<title id="title">minhaprotese.com.br logo</title>
-<desc id="desc">Logo da minhaprotese.com.br com símbolo de movimento em azul-marinho e laranja.</desc>
-<style>
-.word{font-family: Inter, Manrope, Arial, sans-serif; font-weight:700; letter-spacing:-2px}
-.tag{font-family: Inter, Manrope, Arial, sans-serif; font-weight:500; letter-spacing:10px}
-</style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" role="img" aria-labelledby="t d">
+<title id="t">minhaprotese.com.br logo</title>
+<desc id="d">Logo da minhaprotese.com.br com símbolo de movimento em azul-marinho e laranja.</desc>
 <g transform="translate(35 25)">
   <circle cx="84" cy="28" r="18" fill="#0D1B2A"/>
   <circle cx="91" cy="185" r="15" fill="#0D1B2A"/>
   <path d="M10 112 C54 58, 100 78, 160 66 C132 104, 85 92, 38 130 Z" fill="#0D1B2A"/>
   <path d="M22 190 C68 112, 118 90, 145 112 C112 134, 91 170, 42 215 Z" fill="#F28C28"/>
 </g>
-<text x="250" y="140" class="word" font-size="86" fill="#0D1B2A">minhaprotese</text>
-<text x="795" y="140" class="word" font-size="86" fill="#F28C28">.com.br</text>
-<text x="252" y="205" class="tag" font-size="22" fill="#46556D">MOBILIDADE. AUTONOMIA. POSSIBILIDADES.</text>
+<text x="250" y="140" font-family="Manrope, Inter, Arial, sans-serif" font-weight="700" font-size="86" letter-spacing="-2" fill="#0D1B2A">minhaprotese</text>
+<text x="795" y="140" font-family="Manrope, Inter, Arial, sans-serif" font-weight="700" font-size="86" letter-spacing="-2" fill="#F28C28">.com.br</text>
+<text x="252" y="205" font-family="Inter, Arial, sans-serif" font-weight="500" font-size="22" letter-spacing="10" fill="#46556D">MOBILIDADE. AUTONOMIA. POSSIBILIDADES.</text>
 </svg>
