@@ -148,7 +148,7 @@
             </div>
 
             <div class="hero__visual">
-              <img src="assets/hero-banner-crop.png" alt="Pessoa em movimento com prótese, em luz natural" loading="eager">
+              <img src="assets/hero-photo.jpg" alt="Pessoa caminhando com prótese de fibra de carbono em ambiente externo, luz natural" width="860" height="591" loading="eager">
             </div>
           </div>
         </div>
@@ -169,11 +169,12 @@
               if (count === 0) return '';
               return `
                 <a href="#cat/${key}" class="category-card">
-                  <div>
+                  <img src="assets/cat-${key}.png" alt="" class="category-card__illustration" width="84" height="110" loading="lazy">
+                  <div class="category-card__body">
                     <h3 class="category-card__title">${cat.title}</h3>
                     <span class="category-card__subtitle">${cat.subtitle}</span>
+                    <span class="category-card__count">${count} produtos</span>
                   </div>
-                  <span class="category-card__count">${count} produtos</span>
                   <span class="category-card__arrow">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </span>
@@ -233,6 +234,42 @@
         </div>
       </section>
 
+      <!-- EMBALAGEM (sua jornada começa aqui) -->
+      <section class="package-section">
+        <div class="container">
+          <div class="package-section__grid">
+            <div class="package-section__image">
+              <img src="assets/embalagem.png" alt="Caixa de papelão kraft da minhaprotese.com.br com curva navy e ponto laranja" width="590" height="470" loading="lazy">
+            </div>
+            <div>
+              <span class="eyebrow eyebrow--on-dark">Cuidado em cada detalhe</span>
+              <h2 class="package-section__quote">Sua jornada <em>começa aqui.</em></h2>
+              <p class="lead" style="color: #CBD0DA; max-width: 44ch;">Conteúdo que transforma vidas. Embalamos cada pedido com proteção extra e identidade própria — porque acreditamos que cada entrega é o começo de uma nova fase.</p>
+              <div style="display: flex; gap: 32px; margin-top: 32px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 10px; color: #CBD0DA; font-size: 14px;">
+                  <span style="width: 36px; height: 36px; border-radius: 50%; background: rgba(255,198,109,0.16); color: var(--amber-300); display: grid; place-items: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                  </span>
+                  Embalagem reforçada
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; color: #CBD0DA; font-size: 14px;">
+                  <span style="width: 36px; height: 36px; border-radius: 50%; background: rgba(255,198,109,0.16); color: var(--amber-300); display: grid; place-items: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  </span>
+                  Nota fiscal incluída
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; color: #CBD0DA; font-size: 14px;">
+                  <span style="width: 36px; height: 36px; border-radius: 50%; background: rgba(255,198,109,0.16); color: var(--amber-300); display: grid; place-items: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h12v9H3z"/><path d="M15 10h4l2 3v3h-6"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+                  </span>
+                  Rastreio em tempo real
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- MARCAS -->
       <section class="section section--soft">
         <div class="container">
@@ -247,13 +284,13 @@
               if (count === 0) return '';
               const meta = VENDOR_META[v] || {};
               return `
-                <a href="#c/vendor-${slug(v)}" class="category-card">
-                  <div>
+                <a href="#c/vendor-${slug(v)}" class="category-card category-card--vendor">
+                  <div class="category-card__body">
                     <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);">${esc(meta.origin || '')}</span>
                     <h3 class="category-card__title" style="margin-top: 6px;">${esc(v)}</h3>
                     <span class="category-card__subtitle">${esc(meta.desc || '')}</span>
+                    <span class="category-card__count">${count} produtos</span>
                   </div>
-                  <span class="category-card__count">${count} produtos</span>
                   <span class="category-card__arrow">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </span>
