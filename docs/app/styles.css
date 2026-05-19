@@ -441,27 +441,25 @@ p  { margin: 0; }
   display: block;
 }
 
-/* Tablet — mantém 2:1 mas limita altura */
+/* Tablet — mantém 2:1 nativo do banner */
 @media (max-width: 920px) {
   .hero-carousel { max-height: 50vh; }
 }
 
-/* Mobile — vertical: aspect 4:5, mostra o lado esquerdo (logo + título + CTA) */
+/* Mobile — mantém 2:1 nativo do banner (sem corte), background bate com o banner */
 @media (max-width: 600px) {
   .hero-carousel {
-    aspect-ratio: 4 / 5;
-    max-height: 75vh;
+    aspect-ratio: 2 / 1;
     background: #F8F8F9;
   }
   .hero-carousel__slide img {
-    object-fit: cover;
-    object-position: 18% center;
+    object-fit: contain;   /* mostra banner inteiro, sem cortar laterais */
+    object-position: center center;
   }
-}
-
-/* Mobile pequeno — aspect ainda mais vertical (1:1) pra caber */
-@media (max-width: 380px) {
-  .hero-carousel { aspect-ratio: 1 / 1; }
+  /* Dots maiores e mais visíveis no mobile */
+  .hero-carousel__dots { bottom: 10px; padding: 6px 10px; }
+  .hero-carousel__dot { width: 8px; height: 8px; }
+  .hero-carousel__dot.is-active { width: 22px; }
 }
 
 /* Setas */
