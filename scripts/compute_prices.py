@@ -66,25 +66,30 @@ def vendor_matches(vendor: str, candidate: dict) -> bool:
     return any(a in t for a in aliases)
 
 
-def match_to_shop(target_name: str, target_vendor: str, target_sku: str, candidates_by_shop: dict[str, list[dict]], shop: str) -> dict | None:
+def match_to_shop(target_name: str, target_vendor: str, target_sku: str, candidates_by_shop: dict[str, list[dict]], shop: str) -> tuple[dict | None, str]:
+    """
+    Retorna (candidate, strength) onde strength é 'strong' ou 'weak'.
+    Match forte = SKU literal aparece no título → copia título+imagem+preço.
+    Match fraco = só fuzzy nome → copia APENAS preço (mantém título/imagem do PDF).
+    """
     pool = candidates_by_shop.get(shop, [])
     if not pool:
-        return None
-    # 1. Match exato por SKU no título (ex.: "Joelho 3R80" bate com SKU "3R80")
+        return (None, '')
+    # 1. Match forte: SKU literal aparece no título
     sku_core = (target_sku or '').strip().upper()
     if sku_core and len(sku_core) >= 3:
         for c in pool:
             if sku_core in (c['title'] or '').upper():
-                return c
-    # 2. Filtra primeiro por marca — evita casar ProKinetics com Össur só porque ambos são liners
+                return (c, 'strong')
+    # 2. Match fraco: filtra por marca + fuzzy de nome
     pool = [c for c in pool if vendor_matches(target_vendor, c)]
     if not pool:
-        return None
+        return (None, '')
     titles = [c['title'] for c in pool]
     best = process.extractOne(target_name, titles, scorer=fuzz.WRatio)
     if not best or best[1] < FUZZY_THRESHOLD:
-        return None
-    return pool[best[2]]
+        return (None, '')
+    return (pool[best[2]], 'weak')
 
 
 def main() -> int:
@@ -112,8 +117,8 @@ def main() -> int:
 
     for r in raw:
         name = r['name']
-        m_amp = match_to_shop(name, r['vendor'], r['sku'], bench_by_shop, 'lojadoamputado')
-        m_ort = match_to_shop(name, r['vendor'], r['sku'], bench_by_shop, 'lojaortopedica')
+        m_amp, s_amp = match_to_shop(name, r['vendor'], r['sku'], bench_by_shop, 'lojadoamputado')
+        m_ort, s_ort = match_to_shop(name, r['vendor'], r['sku'], bench_by_shop, 'lojaortopedica')
 
         prices = []
         if m_amp and m_amp.get('price_brl'):
@@ -148,32 +153,22 @@ def main() -> int:
             confidence = 'pdf-only' if final else 'none'
             matched_none += 1
 
-        # Prefere título do benchmark (mais limpo) quando houver match — corrige nomes
-        # quebrados pelo extrator de PDF.
+        # Só herda título/imagem em match FORTE (SKU literal no título do benchmark).
+        # Match fraco só ganha o preço — mantém nome original do PDF.
         clean_name = r['name']
-        if m_amp and m_amp.get('title'):
-            clean_name = m_amp['title']
-        elif m_ort and m_ort.get('title'):
-            clean_name = m_ort['title']
-
-        # Vendor: prefere o do benchmark se traz uma marca real (não "Marca:Xyz")
-        clean_vendor = r['vendor']
-        for m in (m_amp, m_ort):
-            if m and m.get('vendor'):
-                v = m['vendor'].strip()
-                v = v.replace('Marca:', '').strip()
-                if v and v.lower() not in ('', 'sem marca', 'generico'):
-                    # Mantém o vendor do PDF se já estiver definido (mais consistente)
-                    if not clean_vendor or clean_vendor == 'Desconhecido':
-                        clean_vendor = v
-                    break
-
-        # Pega URL da imagem da primeira loja que tem
         image_url = ''
-        for m in (m_amp, m_ort):
-            if m and m.get('image_url'):
-                image_url = m['image_url']
-                break
+        strong_match = None
+        if s_amp == 'strong':
+            strong_match = m_amp
+        elif s_ort == 'strong':
+            strong_match = m_ort
+        if strong_match:
+            if strong_match.get('title'):
+                clean_name = strong_match['title']
+            if strong_match.get('image_url'):
+                image_url = strong_match['image_url']
+
+        clean_vendor = r['vendor']
 
         enriched.append({
             **r,
