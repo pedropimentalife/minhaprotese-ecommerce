@@ -1,0 +1,119 @@
+<div class="container">
+  <div class="product-page">
+    <div class="product-gallery">
+      <div class="product-gallery__main" data-product-image-main>
+        {%- if product.featured_image -%}
+          {{ product.featured_image | image_url: width: 1200 | image_tag: alt: product.title, loading: 'eager' }}
+        {%- endif -%}
+      </div>
+      {%- if product.images.size > 1 -%}
+        <div class="product-gallery__thumbs">
+          {%- for image in product.images -%}
+            <button type="button" class="product-gallery__thumb{% if forloop.first %} is-active{% endif %}" data-thumb data-image="{{ image | image_url: width: 1200 }}">
+              {{ image | image_url: width: 144 | image_tag: alt: product.title, loading: 'lazy' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product-info">
+      {%- if product.vendor != blank -%}
+        <span class="product-info__vendor">{{ product.vendor }}</span>
+      {%- endif -%}
+      <h1 class="product-info__title">{{ product.title }}</h1>
+      {%- if product.selected_or_first_available_variant.sku != blank -%}
+        <span class="product-info__sku">SKU {{ product.selected_or_first_available_variant.sku }}</span>
+      {%- endif -%}
+
+      <div class="product-info__price-wrap">
+        <span class="product-info__price" data-product-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+          <span class="product-info__price-compare">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" data-product-form>
+        {%- if product.has_only_default_variant == false -%}
+          {%- for option in product.options_with_values -%}
+            <div style="margin-bottom: 16px;">
+              <label class="label">{{ option.name }}</label>
+              <select class="select" name="options[{{ option.name }}]" data-product-option>
+                {%- for value in option.values -%}
+                  <option value="{{ value }}"{% if option.selected_value == value %} selected{% endif %}>{{ value }}</option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+
+        <div class="product-info__actions">
+          <div class="product-info__qty">
+            <button type="button" data-qty-minus aria-label="Diminuir">−</button>
+            <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Quantidade">
+            <button type="button" data-qty-plus aria-label="Aumentar">+</button>
+          </div>
+          <button type="submit" class="btn btn--primary btn--lg" data-add-to-cart>
+            {% if product.available %}Adicionar ao carrinho{% else %}Indisponível{% endif %}
+          </button>
+        </div>
+      </form>
+
+      <a href="https://wa.me/{{ settings.whatsapp_number | replace: '+', '' | replace: ' ', '' | replace: '-', '' }}?text={{ 'Olá, tenho dúvida sobre: ' | append: product.title | url_encode }}" class="btn btn--whatsapp btn--block" target="_blank" rel="noopener">
+        {% render 'icon', name: 'whatsapp', size: 18 %} Tirar dúvida sobre este produto
+      </a>
+
+      {%- if product.description != blank -%}
+        <div class="product-info__description">
+          {{ product.description }}
+        </div>
+      {%- endif -%}
+
+      {%- if product.metafields.specs.table.value -%}
+        <div class="product-specs">
+          <h3 style="font-size: 16px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--brand-slate-500); margin-bottom: 16px;">Especificações</h3>
+          <dl>
+            {%- for row in product.metafields.specs.table.value.rows -%}
+              <dt>{{ row[0] }}</dt>
+              <dd>{{ row[1] }}</dd>
+            {%- endfor -%}
+          </dl>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var form = document.querySelector('[data-product-form]');
+  if (!form) return;
+  var qtyInput = form.querySelector('input[name="quantity"]');
+  form.querySelector('[data-qty-minus]').addEventListener('click', function () {
+    var v = parseInt(qtyInput.value, 10) || 1;
+    qtyInput.value = Math.max(1, v - 1);
+  });
+  form.querySelector('[data-qty-plus]').addEventListener('click', function () {
+    var v = parseInt(qtyInput.value, 10) || 1;
+    qtyInput.value = v + 1;
+  });
+
+  document.querySelectorAll('[data-thumb]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('[data-thumb]').forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      var main = document.querySelector('[data-product-image-main] img');
+      if (main) main.src = btn.getAttribute('data-image');
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Página do produto",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{
+  "name": "minhaprotese-ai-chat",
+  "version": "1.0.0",
+  "description": "Endpoint do assistente IA da loja minha prótese — Claude API + catálogo de produtos.",
+  "type": "module",
+  "engines": { "node": ">=18.17" },
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod",
+    "test": "node test/chat.test.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}

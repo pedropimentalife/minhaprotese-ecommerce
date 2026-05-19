@@ -1,0 +1,77 @@
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="container">
+    <div class="hero__grid">
+      <div>
+        <span class="eyebrow eyebrow--on-dark">{{ section.settings.eyebrow }}</span>
+        <h1 id="hero-heading">
+          {{ section.settings.heading_pre }}
+          <span class="em-italic">{{ section.settings.heading_italic }}</span>
+          {{ section.settings.heading_post }}
+        </h1>
+        <p class="lead">{{ section.settings.lead }}</p>
+        <div class="hero__cta">
+          {%- if section.settings.cta1_label != blank -%}
+            <a href="{{ section.settings.cta1_url }}" class="btn btn--primary btn--lg">{{ section.settings.cta1_label }}</a>
+          {%- endif -%}
+          {%- if section.settings.cta2_label != blank -%}
+            <a href="{{ section.settings.cta2_url }}" class="btn btn--secondary btn--lg" style="border-color: rgba(255,255,255,0.2); color: #fff;">{{ section.settings.cta2_label }}</a>
+          {%- endif -%}
+        </div>
+
+        <div class="hero__stats">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'stat' -%}
+              <div class="hero__stat" {{ block.shopify_attributes }}>
+                <span class="hero__stat-number">{{ block.settings.number }}</span>
+                <span class="hero__stat-label">{{ block.settings.label }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="hero__image">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 900 | image_tag: alt: section.settings.heading_italic, loading: 'eager' }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text",     "id": "eyebrow",        "label": "Eyebrow", "default": "Componentes para prótese e órtese" },
+    { "type": "text",     "id": "heading_pre",    "label": "Título — parte 1", "default": "Para você caminhar" },
+    { "type": "text",     "id": "heading_italic", "label": "Título — palavra em itálico", "default": "no seu ritmo" },
+    { "type": "text",     "id": "heading_post",   "label": "Título — parte 2", "default": "" },
+    { "type": "textarea", "id": "lead",           "label": "Subtítulo", "default": "Encaixes, joelhos, pés, soquetes e acessórios das principais marcas — com curadoria técnica e atendimento que entende do que você precisa." },
+    { "type": "text",     "id": "cta1_label",     "label": "CTA 1 — texto", "default": "Ver catálogo" },
+    { "type": "url",      "id": "cta1_url",       "label": "CTA 1 — link" },
+    { "type": "text",     "id": "cta2_label",     "label": "CTA 2 — texto", "default": "Falar no WhatsApp" },
+    { "type": "url",      "id": "cta2_url",       "label": "CTA 2 — link" },
+    { "type": "image_picker", "id": "image",      "label": "Imagem" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Estatística",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Número", "default": "+1.200" },
+        { "type": "text", "id": "label",  "label": "Rótulo", "default": "SKUs em catálogo" }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "default": {
+    "blocks": [
+      { "type": "stat", "settings": { "number": "+1.200", "label": "SKUs em catálogo" } },
+      { "type": "stat", "settings": { "number": "9 marcas", "label": "Fornecedores curados" } },
+      { "type": "stat", "settings": { "number": "3 dias", "label": "Entrega média SP" } }
+    ]
+  },
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

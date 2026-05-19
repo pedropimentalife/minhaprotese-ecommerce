@@ -1,0 +1,65 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Componentes para prótese e órtese",
+        "heading_pre": "Pra você caminhar",
+        "heading_italic": "no seu ritmo",
+        "heading_post": "",
+        "lead": "Encaixes, joelhos, pés, soquetes, liners e acessórios das principais marcas — com curadoria técnica e atendimento que entende do que você precisa.",
+        "cta1_label": "Ver catálogo",
+        "cta1_url": "/collections/all",
+        "cta2_label": "Falar no WhatsApp",
+        "cta2_url": "https://wa.me/5511000000000"
+      },
+      "blocks": {
+        "stat-1": { "type": "stat", "settings": { "number": "+1.200", "label": "SKUs em catálogo" } },
+        "stat-2": { "type": "stat", "settings": { "number": "9 marcas", "label": "Fornecedores curados" } },
+        "stat-3": { "type": "stat", "settings": { "number": "3 dias", "label": "Entrega média SP" } }
+      },
+      "block_order": ["stat-1", "stat-2", "stat-3"]
+    },
+    "categories": {
+      "type": "featured-collections",
+      "settings": {
+        "eyebrow": "Catálogo",
+        "heading_pre": "Encontre o que",
+        "heading_italic": "você precisa.",
+        "lead": "Organizamos o catálogo por tipo de componente, marca e nível de mobilidade — pra você chegar rápido no que importa."
+      },
+      "blocks": {
+        "c1": { "type": "category", "settings": { "title": "Pés e tornozelos" } },
+        "c2": { "type": "category", "settings": { "title": "Joelhos" } },
+        "c3": { "type": "category", "settings": { "title": "Encaixes e soquetes" } },
+        "c4": { "type": "category", "settings": { "title": "Liners e meias" } },
+        "c5": { "type": "category", "settings": { "title": "Adaptadores" } },
+        "c6": { "type": "category", "settings": { "title": "Membros superiores" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5", "c6"]
+    },
+    "featured": {
+      "type": "featured-products",
+      "settings": {
+        "eyebrow": "Mais procurados",
+        "heading_pre": "Os componentes que",
+        "heading_italic": "saem mais.",
+        "lead": "Curadoria semanal dos produtos com maior demanda dos nossos clientes.",
+        "limit": 8,
+        "view_all_url": "/collections/all"
+      }
+    },
+    "pillars": {
+      "type": "value-pillars",
+      "settings": {
+        "eyebrow": "Por que comprar aqui",
+        "heading_pre": "Mais que um catálogo —",
+        "heading_italic": "uma escolha bem feita."
+      }
+    },
+    "testimonial": {
+      "type": "testimonial"
+    }
+  },
+  "order": ["hero", "categories", "featured", "pillars", "testimonial"]
+}

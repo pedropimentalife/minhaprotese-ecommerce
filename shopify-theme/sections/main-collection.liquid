@@ -1,0 +1,69 @@
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Catálogo</span>
+      <h1 style="font-size: clamp(36px, 5vw, 56px);">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <p class="lead">{{ collection.description }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="collection-layout">
+      <aside class="facets" aria-label="Filtros">
+        <h4>Marca</h4>
+        <ul>
+          {%- assign vendors = collection.products | map: 'vendor' | uniq -%}
+          {%- for v in vendors -%}
+            <li><label><input type="checkbox" data-filter="vendor" value="{{ v | handle }}"> {{ v }}</label></li>
+          {%- endfor -%}
+        </ul>
+
+        <h4>Faixa de preço</h4>
+        <ul>
+          <li><label><input type="radio" name="price" value="0-1000"> Até R$ 1.000</label></li>
+          <li><label><input type="radio" name="price" value="1000-5000"> R$ 1.000 – R$ 5.000</label></li>
+          <li><label><input type="radio" name="price" value="5000-20000"> R$ 5.000 – R$ 20.000</label></li>
+          <li><label><input type="radio" name="price" value="20000+"> Acima de R$ 20.000</label></li>
+        </ul>
+
+        <h4>Disponibilidade</h4>
+        <ul>
+          <li><label><input type="checkbox" data-filter="available" value="true"> Em estoque</label></li>
+        </ul>
+      </aside>
+
+      <div>
+        <div style="display:flex; justify-content: space-between; margin-bottom: 24px; align-items: center;">
+          <span class="meta">{{ collection.products_count }} produtos</span>
+          <select class="select" style="width: auto;" data-sort>
+            <option value="manual">Relevância</option>
+            <option value="best-selling">Mais vendidos</option>
+            <option value="title-ascending">Nome A–Z</option>
+            <option value="price-ascending">Preço: menor → maior</option>
+            <option value="price-descending">Preço: maior → menor</option>
+          </select>
+        </div>
+
+        <div class="products">
+          {%- paginate collection.products by 24 -%}
+            {%- for product in collection.products -%}
+              {% render 'product-card', product: product %}
+            {%- else -%}
+              <p class="lead">Em breve incluiremos produtos nesta categoria.</p>
+            {%- endfor -%}
+
+            {%- if paginate.pages > 1 -%}
+              <div style="grid-column: 1 / -1; display: flex; justify-content: center; gap: 8px; margin-top: 32px;">
+                {{ paginate | default_pagination }}
+              </div>
+            {%- endif -%}
+          {%- endpaginate -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Coleção", "settings": [] }
+{% endschema %}

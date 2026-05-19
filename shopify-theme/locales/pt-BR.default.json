@@ -1,0 +1,36 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Tags: {{ tags }}",
+      "page": "Página {{ page }}"
+    },
+    "404": {
+      "title": "Página não encontrada",
+      "subtext": "404 — esta página não existe ou foi movida."
+    },
+    "search": {
+      "placeholder": "Buscar componente, marca ou SKU",
+      "submit": "Buscar"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Pular para o conteúdo",
+    "close": "Fechar"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Adicionar ao carrinho",
+      "sold_out": "Esgotado",
+      "unavailable": "Indisponível"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Seu carrinho",
+      "empty": "Seu carrinho está vazio",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "checkout": "Finalizar compra"
+    }
+  }
+}

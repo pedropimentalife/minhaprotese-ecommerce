@@ -1,0 +1,29 @@
+{%- comment -%}
+  Renderiza um cartão de produto.
+  Uso: {% render 'product-card', product: product %}
+{%- endcomment -%}
+<a href="{{ product.url }}" class="product-card" aria-label="{{ product.title }}">
+  <div class="product-card__image">
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 480 | image_tag: alt: product.title, loading: 'lazy' }}
+    {%- else -%}
+      <span class="meta">Sem imagem</span>
+    {%- endif -%}
+  </div>
+  <div class="product-card__body">
+    {%- if product.vendor != blank -%}
+      <span class="product-card__vendor">{{ product.vendor }}</span>
+    {%- endif -%}
+    <p class="product-card__title">{{ product.title }}</p>
+    {%- if product.selected_or_first_available_variant.sku != blank -%}
+      <span class="product-card__sku">SKU {{ product.selected_or_first_available_variant.sku }}</span>
+    {%- endif -%}
+    <div class="product-card__price">
+      {%- if product.price_varies -%}
+        <span class="product-card__price--from">a partir de</span>{{ product.price_min | money }}
+      {%- else -%}
+        {{ product.price | money }}
+      {%- endif -%}
+    </div>
+  </div>
+</a>

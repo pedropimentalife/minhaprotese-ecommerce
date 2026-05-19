@@ -1,0 +1,26 @@
+# Secrets — nunca comitar
+scripts/inventory-sync/.env
+*credentials*.json
+*service-account*.json
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Logs
+*.log
+
+# Shopify CLI
+.shopifyignore
+.shopify-cli.yml.bak
+
+# CSV intermediário (mantém só o final)
+catalog/benchmark_prices_sample.csv
+
+# OS
+.DS_Store
+Thumbs.db

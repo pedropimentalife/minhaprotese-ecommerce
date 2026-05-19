@@ -1,0 +1,53 @@
+<header class="site-header" role="banner">
+  <div class="container site-header__inner">
+    <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 220 | image_tag: alt: shop.name, loading: 'eager', height: 36 }}
+      {%- else -%}
+        {% render 'logo-inline' %}
+      {%- endif -%}
+    </a>
+
+    <nav class="site-header__nav" role="navigation" aria-label="Menu principal">
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}"{% if link.active %} class="is-active"{% endif %}>{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+
+    <div class="site-header__actions">
+      <a href="{{ routes.search_url }}" class="icon-btn" aria-label="Buscar">
+        {% render 'icon', name: 'search' %}
+      </a>
+      <a href="{{ routes.account_url }}" class="icon-btn" aria-label="Minha conta">
+        {% render 'icon', name: 'user' %}
+      </a>
+      <a href="{{ routes.cart_url }}" class="icon-btn" aria-label="Carrinho">
+        {% render 'icon', name: 'bag' %}
+        {%- if cart.item_count > 0 -%}
+          <span class="icon-btn__count" data-cart-count>{{ cart.item_count }}</span>
+        {%- endif -%}
+      </a>
+      <button class="site-header__toggle" type="button" aria-label="Abrir menu" data-mobile-menu-toggle>
+        {% render 'icon', name: 'menu' %}
+      </button>
+    </div>
+  </div>
+
+  <div class="site-header__mobile-nav" hidden data-mobile-menu>
+    <nav>
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Cabeçalho",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo (PNG/SVG)" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+  ]
+}
+{% endschema %}

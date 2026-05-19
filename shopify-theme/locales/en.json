@@ -1,0 +1,9 @@
+{
+  "general": {
+    "meta": { "tags": "Tags: {{ tags }}", "page": "Page {{ page }}" },
+    "404": { "title": "Page not found", "subtext": "404 — this page doesn't exist." }
+  },
+  "accessibility": { "skip_to_content": "Skip to content", "close": "Close" },
+  "products": { "product": { "add_to_cart": "Add to cart", "sold_out": "Sold out", "unavailable": "Unavailable" } },
+  "cart": { "general": { "title": "Cart", "empty": "Your cart is empty", "subtotal": "Subtotal", "total": "Total", "checkout": "Checkout" } }
+}

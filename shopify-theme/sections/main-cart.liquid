@@ -1,0 +1,65 @@
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Pedido</span>
+      <h1>Seu <span class="em-italic">carrinho.</span></h1>
+    </div>
+
+    {%- if cart.item_count == 0 -%}
+      <p class="lead">Seu carrinho está vazio.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary btn--lg">Ver catálogo</a>
+    {%- else -%}
+      <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap: 48px;">
+        <form action="{{ routes.cart_url }}" method="post" novalidate>
+          {%- for item in cart.items -%}
+            <div class="cart-line">
+              <div class="cart-line__image">
+                {%- if item.image -%}{{ item.image | image_url: width: 200 | image_tag: alt: item.product.title }}{%- endif -%}
+              </div>
+              <div>
+                <p style="margin:0; font-weight:600; color: var(--warm-ink);">{{ item.product.title }}</p>
+                <span class="meta">SKU {{ item.variant.sku }}</span>
+                {%- if item.variant.title != 'Default Title' -%}
+                  <span class="meta" style="display:block;">{{ item.variant.title }}</span>
+                {%- endif -%}
+              </div>
+              <div>
+                <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="input" style="width:80px; height: 40px;" aria-label="Quantidade">
+              </div>
+              <div style="text-align:right; font-weight:700; color: var(--warm-ink);">{{ item.final_line_price | money }}</div>
+            </div>
+          {%- endfor -%}
+          <button type="submit" class="btn btn--ghost" style="margin-top:16px;">Atualizar carrinho</button>
+        </form>
+
+        <aside class="cart-summary">
+          <div class="cart-summary__row">
+            <span>Subtotal</span>
+            <span>{{ cart.items_subtotal_price | money }}</span>
+          </div>
+          {%- if cart.total_discount > 0 -%}
+            <div class="cart-summary__row" style="color: var(--brand-teal-600);">
+              <span>Descontos</span>
+              <span>-{{ cart.total_discount | money }}</span>
+            </div>
+          {%- endif -%}
+          <div class="cart-summary__row" style="border-top: 1px solid var(--brand-slate-200); padding-top: 14px;">
+            <strong class="cart-summary__total">Total</strong>
+            <strong class="cart-summary__total">{{ cart.total_price | money }}</strong>
+          </div>
+          <p class="meta" style="margin: 12px 0 24px;">Frete e impostos calculados no checkout.</p>
+          <form action="{{ routes.cart_url }}" method="post" novalidate>
+            <button type="submit" name="checkout" class="btn btn--primary btn--block btn--lg">Finalizar compra</button>
+          </form>
+          <a href="https://wa.me/{{ settings.whatsapp_number | replace: '+', '' | replace: ' ', '' | replace: '-', '' }}" class="btn btn--whatsapp btn--block" style="margin-top:12px;" target="_blank" rel="noopener">
+            {% render 'icon', name: 'whatsapp', size: 18 %} Comprar pelo WhatsApp
+          </a>
+        </aside>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Carrinho", "settings": [] }
+{% endschema %}

@@ -1,0 +1,16 @@
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Catálogo completo</span>
+      <h1>Categorias <span class="em-italic">de produtos.</span></h1>
+    </div>
+    <div class="categories">
+      {%- for collection in collections -%}
+        <a href="{{ collection.url }}" class="category-card">
+          <h3 class="category-card__title">{{ collection.title }}</h3>
+          <span class="category-card__count">{{ collection.products_count }} produtos</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>

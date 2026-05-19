@@ -1,0 +1,59 @@
+<section class="section section--cream" aria-labelledby="featured-collections-heading">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2 id="featured-collections-heading">
+        {{ section.settings.heading_pre }}
+        <span class="em-italic">{{ section.settings.heading_italic }}</span>
+      </h2>
+      <p class="lead">{{ section.settings.lead }}</p>
+    </div>
+
+    <div class="categories">
+      {%- for block in section.blocks -%}
+        {%- assign coll = collections[block.settings.collection] -%}
+        <a href="{{ coll.url | default: block.settings.collection.url }}" class="category-card" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.title }}" loading="lazy" style="position:absolute; top:16px; right:16px; max-width: 120px; opacity: 0.85;">
+          {%- endif -%}
+          <h3 class="category-card__title">{{ block.settings.title | default: coll.title }}</h3>
+          <span class="category-card__count">{{ coll.products_count | default: '—' }} produtos</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Categorias em destaque",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Catálogo" },
+    { "type": "text", "id": "heading_pre", "label": "Título — parte 1", "default": "Encontre o que" },
+    { "type": "text", "id": "heading_italic", "label": "Título — itálico", "default": "você precisa." },
+    { "type": "textarea", "id": "lead", "label": "Lead", "default": "Categorias organizadas por tipo de componente, fornecedor e nível de mobilidade." }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Categoria",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Coleção" },
+        { "type": "text", "id": "title", "label": "Título (opcional)" },
+        { "type": "image_picker", "id": "image", "label": "Imagem" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "category", "settings": { "title": "Pés e tornozelos" } },
+      { "type": "category", "settings": { "title": "Joelhos" } },
+      { "type": "category", "settings": { "title": "Encaixes e soquetes" } },
+      { "type": "category", "settings": { "title": "Liners e meias" } },
+      { "type": "category", "settings": { "title": "Adaptadores" } },
+      { "type": "category", "settings": { "title": "Componentes superiores" } }
+    ]
+  },
+  "presets": [{ "name": "Categorias em destaque" }]
+}
+{% endschema %}

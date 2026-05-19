@@ -1,0 +1,24 @@
+<section class="section section--charcoal" aria-labelledby="testimonial-heading">
+  <div class="container" style="max-width: 900px; text-align: center;">
+    <span class="eyebrow eyebrow--on-dark">{{ section.settings.eyebrow }}</span>
+    <h2 id="testimonial-heading" style="color:#fff; max-width: 22ch; margin: 0 auto;">
+      <span class="em-italic" style="color: var(--brand-teal-300);">"{{ section.settings.quote }}"</span>
+    </h2>
+    <p style="margin-top: 32px; color: #CBD0D4; font-size: 14px;">
+      <strong style="color:#fff;">{{ section.settings.author }}</strong> · {{ section.settings.role }}
+    </p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Depoimento",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Quem compra aqui" },
+    { "type": "textarea", "id": "quote", "label": "Frase", "default": "Cheguei perdido, sem saber por onde começar. A equipe me explicou cada componente, escolheu o ideal para o meu pai e ainda acompanhou a entrega." },
+    { "type": "text", "id": "author", "label": "Autor", "default": "Renato S." },
+    { "type": "text", "id": "role", "label": "Cargo / cidade", "default": "Filho de paciente · São Paulo" }
+  ],
+  "presets": [{ "name": "Depoimento" }]
+}
+{% endschema %}

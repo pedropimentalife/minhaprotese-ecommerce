@@ -1,0 +1,52 @@
+<section class="section" aria-labelledby="featured-products-heading">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2 id="featured-products-heading">
+        {{ section.settings.heading_pre }}
+        <span class="em-italic">{{ section.settings.heading_italic }}</span>
+      </h2>
+      <p class="lead">{{ section.settings.lead }}</p>
+    </div>
+
+    <div class="products">
+      {%- assign coll = collections[section.settings.collection] -%}
+      {%- for product in coll.products limit: section.settings.limit -%}
+        {% render 'product-card', product: product %}
+      {%- else -%}
+        {% for i in (1..8) %}
+          <div class="product-card">
+            <div class="product-card__image"></div>
+            <div class="product-card__body">
+              <span class="product-card__vendor">Marca</span>
+              <p class="product-card__title">Produto exemplo</p>
+              <span class="product-card__price">R$ 0,00</span>
+            </div>
+          </div>
+        {% endfor %}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.view_all_url != blank -%}
+      <div class="text-center" style="margin-top: 48px;">
+        <a href="{{ section.settings.view_all_url }}" class="btn btn--secondary btn--lg">Ver tudo</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produtos em destaque",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Mais procurados" },
+    { "type": "text", "id": "heading_pre", "label": "Título — parte 1", "default": "Os componentes que" },
+    { "type": "text", "id": "heading_italic", "label": "Título — itálico", "default": "saem mais." },
+    { "type": "textarea", "id": "lead", "label": "Lead", "default": "Curadoria semanal dos produtos com maior demanda dos nossos clientes." },
+    { "type": "collection", "id": "collection", "label": "Coleção" },
+    { "type": "range", "id": "limit", "label": "Quantidade", "min": 4, "max": 16, "step": 4, "default": 8 },
+    { "type": "url", "id": "view_all_url", "label": "URL Ver tudo" }
+  ],
+  "presets": [{ "name": "Produtos em destaque" }]
+}
+{% endschema %}

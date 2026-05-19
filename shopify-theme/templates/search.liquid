@@ -1,0 +1,27 @@
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Busca</span>
+      <h1>{% if search.performed %}{{ search.results_count }} resultados para "<span class="em-italic">{{ search.terms }}</span>"{% else %}O que você procura?{% endif %}</h1>
+    </div>
+
+    <form action="{{ routes.search_url }}" method="get" style="max-width: 600px; margin-bottom: 48px;">
+      <div style="display:flex; gap:8px;">
+        <input class="input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Buscar componente, marca ou SKU…">
+        <button class="btn btn--primary" type="submit">Buscar</button>
+      </div>
+    </form>
+
+    {%- if search.performed -%}
+      <div class="products">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {% render 'product-card', product: item %}
+          {%- endif -%}
+        {%- else -%}
+          <p class="lead">Nenhum resultado. Tente outra palavra — ou nos chame no WhatsApp que ajudamos.</p>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>

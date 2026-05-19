@@ -1,0 +1,8 @@
+{
+  "type": "header",
+  "name": "Cabeçalho",
+  "sections": {
+    "header": { "type": "header" }
+  },
+  "order": ["header"]
+}

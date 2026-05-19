@@ -1,0 +1,18 @@
+{
+  "current": {
+    "color_primary": "#14B4B4",
+    "color_accent": "#F09020",
+    "color_text": "#1F262B",
+    "color_bg": "#FFFFFF",
+    "color_surface_soft": "#FAF6F0",
+    "whatsapp_number": "+5511000000000",
+    "phone": "+55 11 0000-0000",
+    "email": "contato@minhaprotese.com.br"
+  },
+  "presets": {
+    "Padrão": {
+      "color_primary": "#14B4B4",
+      "color_accent": "#F09020"
+    }
+  }
+}

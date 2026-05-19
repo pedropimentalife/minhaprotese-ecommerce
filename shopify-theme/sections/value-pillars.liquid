@@ -1,0 +1,60 @@
+<section class="section section--sand" aria-labelledby="pillars-heading">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2 id="pillars-heading">
+        {{ section.settings.heading_pre }}
+        <span class="em-italic">{{ section.settings.heading_italic }}</span>
+      </h2>
+      <p class="lead">{{ section.settings.lead }}</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px;">
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-teal-50); display:grid; place-items:center; margin-bottom: 20px;">
+            {% render 'icon', name: block.settings.icon %}
+          </div>
+          <h3 style="font-size: 20px;">{{ block.settings.title }}</h3>
+          <p style="color: var(--brand-slate-600); font-size: 15px; line-height: 1.65;">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pilares de valor",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Por que comprar aqui" },
+    { "type": "text", "id": "heading_pre", "label": "Título — parte 1", "default": "Mais que um catálogo —" },
+    { "type": "text", "id": "heading_italic", "label": "Título — itálico", "default": "uma escolha bem feita." },
+    { "type": "textarea", "id": "lead", "label": "Lead", "default": "Atendimento técnico, curadoria das melhores marcas e logística confiável para todo o Brasil." }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pilar",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Ícone", "default": "shield", "options": [
+          { "value": "shield", "label": "Garantia" },
+          { "value": "truck", "label": "Caminhão" },
+          { "value": "headphones", "label": "Atendimento" },
+          { "value": "leaf", "label": "Cuidado" }
+        ] },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "textarea", "id": "body", "label": "Texto" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "pillar", "settings": { "icon": "shield", "title": "Garantia de origem", "body": "Trabalhamos só com distribuidores autorizados das marcas — Össur, Ottobock, Blumentec, Ortho Pauher, ALPS, Dilepé, Polior, Ethnos e ProKinetics." } },
+      { "type": "pillar", "settings": { "icon": "headphones", "title": "Atendimento que entende", "body": "Equipe técnica que conversa com você ou seu protesista para escolher o componente certo para o seu caso." } },
+      { "type": "pillar", "settings": { "icon": "truck", "title": "Entrega rápida", "body": "Pronta-entrega para os SKUs em estoque. Envio em até 24h após confirmação do pagamento." } }
+    ]
+  },
+  "presets": [{ "name": "Pilares" }]
+}
+{% endschema %}
