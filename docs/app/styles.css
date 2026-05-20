@@ -446,20 +446,134 @@ p  { margin: 0; }
   .hero-carousel { max-height: 50vh; }
 }
 
-/* Mobile — mantém 2:1 nativo do banner (sem corte), background bate com o banner */
-@media (max-width: 600px) {
+/* Slide mobile — escondido por padrão (desktop usa só a img) */
+.hero-carousel__mobile { display: none; }
+
+/* MOBILE — esconde imagem e usa slide HTML nativo */
+@media (max-width: 720px) {
   .hero-carousel {
-    aspect-ratio: 2 / 1;
-    background: #F8F8F9;
+    aspect-ratio: auto;
+    max-height: none;
+    min-height: 480px;
+    background: #FFFFFF;
   }
-  .hero-carousel__slide img {
-    object-fit: contain;   /* mostra banner inteiro, sem cortar laterais */
-    object-position: center center;
+  .hero-carousel__img { display: none; }
+  .hero-carousel__mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 28px 24px 56px;
+    min-height: 480px;
+    position: relative;
+    background:
+      radial-gradient(circle at 100% 100%, rgba(242, 140, 40, 0.10), transparent 50%),
+      radial-gradient(circle at 0% 0%, rgba(30, 91, 184, 0.06), transparent 60%),
+      #FFFFFF;
+    overflow: hidden;
   }
-  /* Dots maiores e mais visíveis no mobile */
-  .hero-carousel__dots { bottom: 10px; padding: 6px 10px; }
+  /* Decoração de canto: curva laranja */
+  .hero-carousel__mobile::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    background: var(--orange-500);
+    border-radius: 50% 0 0 0;
+    opacity: 0.10;
+    pointer-events: none;
+  }
+
+  .hcm__logo {
+    height: 40px;
+    width: auto;
+    margin-bottom: 4px;
+  }
+
+  .hcm__title {
+    font-family: var(--font-title);
+    font-size: clamp(28px, 8vw, 38px);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    color: var(--navy-900);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hcm__title-line { display: block; }
+  .hcm__accent { color: var(--orange-500); }
+  .hcm__dot { color: var(--orange-500); }
+
+  .hcm__subtitle {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 4px 0 12px;
+    max-width: 36ch;
+  }
+
+  .hcm__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    justify-content: center;
+    text-decoration: none;
+  }
+  .hcm__cta svg { flex-shrink: 0; }
+
+  /* Pilares — grid 3 ou 4 colunas, compacto */
+  .hcm__pillars {
+    margin-top: 16px;
+    display: grid;
+    gap: 12px;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  .hcm__pillars--3 { grid-template-columns: repeat(3, 1fr); }
+  .hcm__pillars--4 { grid-template-columns: repeat(2, 1fr); }
+  .hcm__pillar {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+  .hcm__pillar-icon {
+    color: var(--blue-700);
+    flex-shrink: 0;
+    background: var(--blue-50);
+    padding: 6px;
+    border-radius: 50%;
+    display: inline-flex;
+  }
+  .hcm__pillar strong {
+    display: block;
+    font-weight: 700;
+    color: var(--navy-900);
+    font-size: 12px;
+  }
+  .hcm__pillar span {
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+  .hcm__pillars--3 .hcm__pillar { font-size: 11px; }
+  .hcm__pillars--3 .hcm__pillar strong { font-size: 12px; }
+
+  /* Dots mais visíveis no mobile */
+  .hero-carousel__dots {
+    bottom: 14px;
+    padding: 6px 10px;
+  }
   .hero-carousel__dot { width: 8px; height: 8px; }
   .hero-carousel__dot.is-active { width: 22px; }
+
+  /* Esconde a setas-laterais — fica só swipe e dots no mobile */
+  .hero-carousel__arrow { display: none; }
 }
 
 /* Setas */

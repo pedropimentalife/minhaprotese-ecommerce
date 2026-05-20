@@ -120,18 +120,97 @@
     const totalSku = CATALOG.reduce((a, p) => a + p.cluster_size, 0);
 
     const slides = [
-      { img: 'assets/banner-proteses-orteses.jpg', alt: 'Próteses e Órteses — Tecnologia e conforto para cada etapa', href: '#cat/proteses', label: 'Explorar categoria' },
-      { img: 'assets/banner-mobilidade.jpg',       alt: 'Mobilidade, autonomia e possibilidades — sua loja online de próteses, órteses e mobilidade', href: '#brands', label: 'Conheça as categorias' },
-      { img: 'assets/banner-tecnologia.jpg',       alt: 'Tecnologia e cuidado para cada passo da sua jornada', href: '#cat/proteses', label: 'Ver produtos' },
+      {
+        img: 'assets/banner-proteses-orteses.jpg',
+        href: '#cat/proteses',
+        title: { pre: 'Próteses', mid: '', post: 'e Órteses' },
+        subtitle: 'Tecnologia e conforto para cada etapa.',
+        cta: { label: 'Explorar categoria', variant: 'primary' },
+        pillars: [
+          { icon: 'shield', title: 'Tecnologia', sub: 'que transforma' },
+          { icon: 'user',   title: 'Conforto',   sub: 'que acompanha' },
+          { icon: 'badge',  title: 'Qualidade',  sub: 'que você confia' },
+        ],
+        theme: 'light',
+      },
+      {
+        img: 'assets/banner-mobilidade.jpg',
+        href: '#brands',
+        title: { pre: 'Mobilidade, autonomia', mid: '', post: 'e possibilidades.', accent: 'dot' },
+        subtitle: 'A sua loja online de próteses, órteses e produtos de mobilidade.',
+        cta: { label: 'Conheça as categorias', variant: 'orange', icon: 'cart' },
+        pillars: [
+          { icon: 'shield',     title: 'Compra segura',          sub: 'Ambiente 100% protegido' },
+          { icon: 'truck',      title: 'Entrega para todo Brasil', sub: 'Rapidez e rastreio' },
+          { icon: 'badge',      title: 'Produtos de qualidade',  sub: 'Conforto e confiança' },
+          { icon: 'headphones', title: 'Atendimento especializado', sub: 'Antes, durante e depois' },
+        ],
+        theme: 'light',
+      },
+      {
+        img: 'assets/banner-tecnologia.jpg',
+        href: '#cat/proteses',
+        title: { pre: 'Tecnologia e cuidado para', mid: 'cada passo', post: 'da sua jornada.' },
+        subtitle: 'Próteses, órteses e produtos de mobilidade com qualidade, conforto e confiança.',
+        cta: { label: 'Ver produtos', variant: 'primary' },
+        pillars: [],
+        theme: 'light',
+      },
     ];
+
+    const ICONS = {
+      shield:     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/></svg>',
+      user:       '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>',
+      badge:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="m9 13.5-1.5 7.5 4.5-3 4.5 3-1.5-7.5"/></svg>',
+      truck:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h12v9H3z"/><path d="M15 10h4l2 3v3h-6"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>',
+      headphones: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-7a9 9 0 0 1 18 0v7"/><path d="M3 15h3v6H4a1 1 0 0 1-1-1v-5z"/><path d="M21 15h-3v6h2a1 1 0 0 0 1-1v-5z"/></svg>',
+      cart:       '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 14H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>',
+      arrow:      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+    };
+
+    function renderMobileSlide(s) {
+      const t = s.title;
+      const titleHtml = `
+        ${t.pre ? `<span class="hcm__title-line">${esc(t.pre)}</span>` : ''}
+        ${t.mid ? `<span class="hcm__title-line"><span class="hcm__accent">${esc(t.mid)}</span></span>` : ''}
+        ${t.post ? `<span class="hcm__title-line">${esc(t.post)}${t.accent === 'dot' ? '<span class="hcm__dot">.</span>' : ''}</span>` : ''}
+      `;
+      const btnClass = s.cta.variant === 'orange' ? 'btn--orange' : 'btn--primary';
+      const icon = s.cta.icon ? ICONS[s.cta.icon] : '';
+      const pillars = s.pillars.length > 0 ? `
+        <div class="hcm__pillars hcm__pillars--${s.pillars.length}">
+          ${s.pillars.map(p => `
+            <div class="hcm__pillar">
+              <span class="hcm__pillar-icon">${ICONS[p.icon] || ''}</span>
+              <div>
+                <strong>${esc(p.title)}</strong>
+                <span>${esc(p.sub)}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : '';
+      return `
+        <div class="hero-carousel__mobile" data-mobile>
+          <img class="hcm__logo" src="assets/logo.svg" alt="minhaprotese.com.br" width="206" height="48">
+          <h2 class="hcm__title">${titleHtml}</h2>
+          <p class="hcm__subtitle">${esc(s.subtitle)}</p>
+          <a href="${s.href}" class="btn ${btnClass} btn--lg hcm__cta">
+            ${icon}${icon ? ' ' : ''}${esc(s.cta.label)} ${ICONS.arrow}
+          </a>
+          ${pillars}
+        </div>
+      `;
+    }
 
     $('#main').innerHTML = `
       <!-- HERO CARROSSEL -->
       <section class="hero-carousel" aria-label="Banners de destaque" data-carousel>
         <div class="hero-carousel__track" data-track>
           ${slides.map((s, i) => `
-            <a class="hero-carousel__slide ${i === 0 ? 'is-active' : ''}" href="${s.href}" data-slide="${i}" aria-label="${esc(s.label)} — ${esc(s.alt)}">
-              <img src="${s.img}" alt="${esc(s.alt)}" loading="${i === 0 ? 'eager' : 'lazy'}" width="1672" height="941">
+            <a class="hero-carousel__slide ${i === 0 ? 'is-active' : ''}" href="${s.href}" data-slide="${i}" aria-label="${esc(s.cta.label)}">
+              <img class="hero-carousel__img" src="${s.img}" alt="${esc(s.cta.label)}" loading="${i === 0 ? 'eager' : 'lazy'}" width="1800" height="900">
+              ${renderMobileSlide(s)}
             </a>
           `).join('')}
         </div>
